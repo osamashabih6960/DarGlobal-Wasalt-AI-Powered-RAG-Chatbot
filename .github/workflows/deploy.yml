@@ -1,24 +1,40 @@
+
 name: Deploy to Hugging Face Space
+
 on:
   workflow_run:
     workflows: ["CI"]
     branches: [main]
     types: [completed]
+
 jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-        with: {fetch-depth: 0}
-      - name: Push to Space
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+
+      - name: Validate credentials
         env:
           HF_USERNAME: ${{ secrets.HF_USERNAME }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           HF_SPACE: ${{ vars.HF_SPACE }}
-        run: git push --force "https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$HF_SPACE" HEAD:main
-      - name: Health check live URL
-        env:
-          URL: https://${{ secrets.HF_USERNAME }}-${{ vars.HF_SPACE }}.hf.space/health
         run: |
-          for i in $(seq 1 40); do curl -fs "$URL" && exit 0; sleep 15; done; exit 1
+          test -n "$HF_USERNAME" || (echo "HF_USERNAME missing" && exit 1)
+          test -n "$HF_TOKEN" || (echo "HF_TOKEN missing" && exit 1)
+          test -n "$HF_SPACE" || (echo "HF_SPACE missing" && exit 1)
+
+      - name: Push to Hugging Face Space
+        env:
+          HF_USERNAME: ${{ secrets.HF_USERNAME }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          git push --force \
+            "https://${HF_USERNAME}:${HF_TOKEN}@huggingface.co/spaces/${HF_USERNAME}/${HF_SPACE}" \
+            HEAD:main

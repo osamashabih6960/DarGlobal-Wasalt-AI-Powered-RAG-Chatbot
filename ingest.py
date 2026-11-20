@@ -45,6 +45,10 @@ def load_docs() -> list[Document]:
             try:
                 record = json.loads(line)
 
+                if not isinstance(record, dict):
+                    invalid_records += 1
+                    continue
+
                 text = str(record.get("text") or "").strip()
 
                 if not text:
@@ -119,9 +123,25 @@ def create_vector_store(chunks: list[Document]) -> FAISS:
     return vector_store
 
 
-def save_vector_store(vector_store: FAISS) -> None:
-    """Save the new index safely before replacing the existing index."""
+def verify_index(index_path: Path) -> None:
+    """Verify that the saved FAISS index files exist and are not empty."""
 
+    required_files = [
+        index_path / "index.faiss",
+        index_path / "index.pkl",
+    ]
+
+    for file_path in required_files:
+        if not file_path.is_file() or file_path.stat().st_size == 0:
+            raise RuntimeError(f"Index file missing or empty: {file_path}")
+
+
+def save_vector_store(vector_store: FAISS) -> None:
+    """Save and verify the new index, preserving the previous index as backup."""
+
+    INDEX_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+    # Remove any incomplete index from a previous interrupted run.
     if TEMP_INDEX_PATH.exists():
         shutil.rmtree(TEMP_INDEX_PATH)
 
@@ -129,40 +149,55 @@ def save_vector_store(vector_store: FAISS) -> None:
 
     vector_store.save_local(str(TEMP_INDEX_PATH))
 
-    # Verify both FAISS files exist before replacing the old index.
-    required_files = [
-        TEMP_INDEX_PATH / "index.faiss",
-        TEMP_INDEX_PATH / "index.pkl",
-    ]
-
-    for file_path in required_files:
-        if not file_path.exists() or file_path.stat().st_size == 0:
-            raise RuntimeError(f"Index file missing or empty: {file_path}")
+    # Verify the newly generated index before touching the old one.
+    verify_index(TEMP_INDEX_PATH)
 
     old_index_backup = None
 
     if INDEX_PATH.exists():
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        old_index_backup = Path(f"data/index_replaced_{timestamp}")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        old_index_backup = INDEX_PATH.parent / f"index_backup_{timestamp}"
 
-        INDEX_PATH.rename(old_index_backup)
+        print(f"Creating backup of existing index: {old_index_backup}")
+
+        # Copy the existing index instead of renaming it.
+        shutil.copytree(INDEX_PATH, old_index_backup)
+
+        verify_index(old_index_backup)
 
     try:
-        TEMP_INDEX_PATH.rename(INDEX_PATH)
+        # Remove the previous index only after its backup is verified.
+        if INDEX_PATH.exists():
+            shutil.rmtree(INDEX_PATH)
+
+        # shutil.move handles cross-device moves using copy + delete.
+        shutil.move(str(TEMP_INDEX_PATH), str(INDEX_PATH))
+
+        # Verify the installed index.
+        verify_index(INDEX_PATH)
 
     except Exception:
-        # Restore the old index if replacement fails.
+        print("Index installation failed. Attempting rollback...")
+
+        if INDEX_PATH.exists():
+            shutil.rmtree(INDEX_PATH)
+
         if old_index_backup and old_index_backup.exists():
-            old_index_backup.rename(INDEX_PATH)
+            shutil.copytree(old_index_backup, INDEX_PATH)
+            verify_index(INDEX_PATH)
+            print("Previous FAISS index restored.")
+
         raise
 
     print("New FAISS index installed successfully.")
 
     if old_index_backup:
-        print(f"Previous index preserved at: {old_index_backup}")
+        print(f"Previous index backup preserved at: {old_index_backup}")
 
 
 def main() -> None:
+    """Run the complete ingestion pipeline."""
+
     print("\nStarting DarGlobal x Wasalt ingestion...\n")
 
     docs = load_docs()

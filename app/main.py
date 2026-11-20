@@ -1,9 +1,11 @@
+
 """FastAPI application for the DarGlobal x Wasalt RAG chatbot."""
 
 import os
 import time
 from functools import lru_cache
 from pathlib import Path
+from typing import Any
 
 from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI, HTTPException
@@ -31,6 +33,12 @@ app = FastAPI(
 
 class ChatIn(BaseModel):
     message: str = Field(min_length=1, max_length=1000)
+    session_id: str = Field(default="default", max_length=64)
+
+
+class APIChatIn(BaseModel):
+    message: str = Field(min_length=1, max_length=1000)
+    history: list[dict[str, Any]] = Field(default_factory=list)
     session_id: str = Field(default="default", max_length=64)
 
 
@@ -101,6 +109,24 @@ def chat(body: ChatIn, bg: BackgroundTasks):
     )
 
     return result
+
+
+# --------------------------------------------------
+# Frontend API Compatibility
+# --------------------------------------------------
+
+
+@app.post("/api/chat")
+def api_chat(body: APIChatIn, bg: BackgroundTasks):
+    """Accept frontend chat requests and reuse the existing RAG endpoint."""
+
+    return chat(
+        ChatIn(
+            message=body.message,
+            session_id=body.session_id,
+        ),
+        bg,
+    )
 
 
 # --------------------------------------------------

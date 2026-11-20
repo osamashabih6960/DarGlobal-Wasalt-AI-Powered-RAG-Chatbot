@@ -1,0 +1,66 @@
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Virtual environments
+.venv/
+venv/
+myenv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Vector database and generated indexes
+data/index/
+data/index_backup_*/
+data/index_replaced_*/
+
+# MLflow
+mlruns/
+mlflow.db
+*.sqlite
+*.sqlite3
+
+# Cache and testing
+.cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+
+
+# Generated datasets and crawl output
+data/index/
+data/index_backup_*/
+data/index_replaced_*/
+data/combined_dataset.jsonl
+data/combined_dataset.backup_*
+data/full_dataset.json
+data/full_dataset.jsonl
+data/full_dataset.csv
+data/wasalt_dataset.json
+data/wasalt_dataset.jsonl
+data/wasalt_dataset.csv
+data/quarantined_bad_records.jsonl
+data/pages.jsonl
+
+# Local runtime files
+crawl_status.json
+mlflow.db
+ingest.py.backup

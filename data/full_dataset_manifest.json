@@ -1,0 +1,13 @@
+{
+  "records": 6144,
+  "pages_crawled": 1003,
+  "urls_discovered": 1004,
+  "robots_blocked": 0,
+  "companies": [
+    "DarGlobal"
+  ],
+  "generated_at": "2026-11-19T19:24:38Z",
+  "user_agent": "DarWasaltResearchDatasetBot/1.0 (educational project; contact: add-your-email@example.com)",
+  "max_pages": 20000,
+  "note": "Only public pages accessible under robots.txt were included. This is a crawl snapshot, not a guarantee of every database listing."
+}

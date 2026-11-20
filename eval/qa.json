@@ -1,0 +1,103 @@
+
+[
+  {
+    "question": "What does DarGlobal do?",
+    "keywords": ["luxury real estate", "developer"],
+    "expect_route": "company"
+  },
+  {
+    "question": "In which countries and markets does DarGlobal operate?",
+    "keywords": ["Saudi Arabia", "Qatar"],
+    "expect_route": "company"
+  },
+  {
+    "question": "What type of properties does DarGlobal develop?",
+    "keywords": ["residential", "mixed-use"],
+    "expect_route": "company"
+  },
+  {
+    "question": "What is the gross development value mentioned on DarGlobal's website?",
+    "keywords": ["23", "billion"],
+    "expect_route": "company"
+  },
+  {
+    "question": "What new development did DarGlobal announce in Jeddah?",
+    "keywords": ["Jeddah", "SAR 1 billion"],
+    "expect_route": "company"
+  },
+  {
+    "question": "Which organization partnered with DarGlobal for Trump International Simaisma?",
+    "keywords": ["Trump Organization", "Qatar"],
+    "expect_route": "company"
+  },
+  {
+    "question": "What are Trump Villas in Simaisma?",
+    "keywords": ["Trump Villas", "Qatar"],
+    "expect_route": "company"
+  },
+  {
+    "question": "What revenue growth did DarGlobal report in HY 2026?",
+    "keywords": ["66%", "revenue"],
+    "expect_route": "company"
+  },
+  {
+    "question": "Which contractor was appointed for Trump International Hotel and Tower Dubai?",
+    "keywords": ["Gulf Asia Contracting", "Dubai"],
+    "expect_route": "company"
+  },
+  {
+    "question": "What is AIDA?",
+    "keywords": ["Muscat", "Oman", "master-planned"],
+    "expect_route": "company"
+  },
+  {
+    "question": "What is Wasalt?",
+    "keywords": ["properties", "Saudi Arabia"],
+    "expect_route": "company"
+  },
+  {
+    "question": "What can users do on Wasalt?",
+    "keywords": ["buy", "rent"],
+    "expect_route": "company"
+  },
+  {
+    "question": "Can property owners list their properties on Wasalt?",
+    "keywords": ["list", "property"],
+    "expect_route": "company"
+  },
+  {
+    "question": "What types of properties are available on Wasalt?",
+    "keywords": ["apartments", "villas"],
+    "expect_route": "company"
+  },
+  {
+    "question": "Can users find land for sale on Wasalt?",
+    "keywords": ["land", "sale"],
+    "expect_route": "company"
+  },
+  {
+    "question": "In which Saudi cities can users find villas on Wasalt?",
+    "keywords": ["Riyadh", "Jeddah"],
+    "expect_route": "company"
+  },
+  {
+    "question": "Does Wasalt support property auctions?",
+    "keywords": ["auctions", "Infath"],
+    "expect_route": "company"
+  },
+  {
+    "question": "Does Wasalt have a mobile application?",
+    "keywords": ["Wasalt app"],
+    "expect_route": "company"
+  },
+  {
+    "question": "What is the purpose of the Wasalt Business app?",
+    "keywords": ["Wasalt Business"],
+    "expect_route": "company"
+  },
+  {
+    "question": "Who won the cricket match yesterday?",
+    "keywords": ["DarGlobal"],
+    "expect_route": "offtopic"
+  }
+]

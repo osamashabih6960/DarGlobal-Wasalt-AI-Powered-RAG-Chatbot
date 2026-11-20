@@ -1,0 +1,18 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11", cache: pip}
+      - run: pip install -r requirements-dev.txt
+      - run: ruff check .
+      - run: pytest -q
+      - run: docker build -t dar-bot .
+      - name: Container smoke test
+        run: |
+          docker run -d -p 7860:7860 --name t dar-bot
+          for i in $(seq 1 20); do curl -fs localhost:7860/health && exit 0; sleep 3; done
+          docker logs t; exit 1

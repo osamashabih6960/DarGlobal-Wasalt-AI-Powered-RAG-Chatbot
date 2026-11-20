@@ -1,0 +1,373 @@
+DAR GLOBAL + WASALT CHATBOT PROJECT FLOW AND CURRENT PROGRESS
+=================================
+
+1. PROJECT GOAL
+
+The goal is to build a chatbot that can answer questions using publicly
+available information from two real-estate websites:
+
+-   DarGlobal
+-   Wasalt
+
+The planned system has these main parts:
+
+1.  Collect public website data.
+2.  Clean and prepare the collected data.
+3.  Split long text into smaller chunks.
+4.  Convert chunks into vector embeddings.
+5.  Store embeddings in a FAISS vector database.
+6.  Use LangGraph to control the chatbot workflow.
+7.  Use an LLM through an OpenAI-compatible API such as OpenRouter.
+8.  Expose the chatbot through FastAPI.
+9.  Provide a simple web chat interface.
+10. Test, package, and deploy the application.
+
+The project is being developed on Windows using PowerShell and Python.
+
+PROJECT FOLDER
+
+C:Global-wasalt-complete-crawler-wasalt-complete-crawler
+
+2. WORK COMPLETED: PROJECT STRUCTURE
+
+The project folder currently contains these important items:
+
+-   app/
+-   data/
+-   docs/
+-   eval/
+-   tests/
+-   .github/
+-   myenv/
+-   scrape.py
+-   scraper.py
+-   ingest.py
+-   requirements.txt
+-   requirements-dev.txt
+-   Dockerfile
+-   docker-compose.yml
+-   README.md
+-   .env.example
+-   crawl_status.json
+
+The app folder contains:
+
+-   app/graph.py
+-   app/main.py
+-   app/tracking.py
+-   app/init.py
+-   app/static/index.html
+
+What these files are intended to do:
+
+-   scrape.py: Main crawler used for the large DarGlobal/Wasalt crawl.
+-   scraper.py: Smaller initial scaffold scraper. It has a limit of 40
+    pages per website and writes to data/pages.jsonl.
+-   ingest.py: Reads prepared page records, chunks text, creates
+    embeddings, and saves a FAISS index.
+-   app/graph.py: Contains the initial LangGraph and retrieval workflow.
+-   app/main.py: Contains the initial FastAPI application and API
+    endpoints.
+-   app/tracking.py: Contains initial tracking/observability support.
+-   app/static/index.html: Initial browser chat interface.
+-   Dockerfile and docker-compose.yml: Initial containerization
+    scaffold.
+-   .env.example: Example environment-variable configuration.
+
+Important: These files are an initial scaffold. Their complete
+functionality has not yet been tested end-to-end.
+
+3. DAR GLOBAL SCRAPING: COMPLETED
+
+The main crawler was run for DarGlobal using:
+
+python scrape.py –only DarGlobal –max-pages 20000 –delay 2
+
+The crawler completed after exhausting its available crawl queue. It did
+not need to reach the maximum limit of 20,000 pages.
+
+Verified final results:
+
+-   Pages crawled: 1,003
+-   URLs discovered: 1,004
+-   Records in final dataset: 6,144
+-   Robots-blocked count in manifest: 0
+-   Company in dataset: DarGlobal
+
+The final dataset files were created inside data/:
+
+-   data/full_dataset.csv
+-   data/full_dataset.json
+-   data/full_dataset.jsonl
+-   data/full_dataset_manifest.json
+
+The JSONL file was independently checked. It contains 6,144 records.
+
+Each record has these fields:
+
+-   id
+-   company
+-   category
+-   title
+-   text
+-   source_url
+
+The manifest records 6,144 records and 1,003 crawled pages.
+
+Important distinction: The progress output’s “records” count during
+crawling can be higher than the final manifest count because the crawler
+removes duplicate records before saving the final dataset.
+
+DarGlobal scraping is complete based on the local crawl output and
+manifest.
+
+4. WASALT SCRAPING: IN PROGRESS AT LAST UPDATE
+
+Wasalt scraping was started separately using:
+
+python scrape.py –only Wasalt –out data/wasalt_dataset –max-pages 20000
+–delay 2
+
+At the last progress update shared in the conversation, the crawler
+showed:
+
+-   Pages crawled: 1,300
+-   URLs discovered: 14,100
+-   Records collected so far: 5,263
+
+These are intermediate progress numbers, not the final dataset totals.
+
+The value 20,000 is the maximum page limit, not a promise that 20,000
+pages will be crawled. The crawler can finish earlier when its eligible
+URL queue is exhausted.
+
+The Wasalt crawl must be allowed to finish. Do not stop it just because
+the number of discovered URLs is large.
+
+After the crawl completes, check the final manifest and files. The
+expected output location is:
+
+data/wasalt_dataset/
+
+The exact output filenames should be confirmed from the completed run.
+Do not assume the final record count until the manifest is available.
+
+A previous check of https://wasalt.sa/llms.txt returned HTTP 403 in a
+Python request. This means that request was blocked; it does not, by
+itself, prove that the site’s crawling policy allows or disallows all
+content. Do not bypass Cloudflare or other access controls. Follow
+robots.txt and the site’s applicable terms and policies. Do not crawl
+restricted paths.
+
+5. TWO SCRAPERS: IMPORTANT DIFFERENCE
+
+There are two crawler scripts in this project. They should not be
+confused.
+
+A)  scrape.py This is the main crawler used for the large dataset. It
+    supports selecting a company and setting the output folder and
+    maximum page limit.
+
+B)  scraper.py This is the smaller initial scaffold scraper. It has
+    MAX_PAGES = 40 and writes to data/pages.jsonl. It was not used to
+    create the verified 6,144-record DarGlobal dataset.
+
+The file data/pages.jsonl currently contains only two placeholder
+records:
+
+-   One DarGlobal placeholder record.
+-   One Wasalt placeholder record.
+
+The placeholder text says to run scraper.py to replace it. Do not treat
+these two rows as the real dataset.
+
+Do not run scraper.py over the current data/pages.jsonl unless its
+output behavior is intentionally being used. It may overwrite that
+placeholder file, and it is not the main large-scale crawl output.
+
+The real DarGlobal dataset is data/full_dataset.jsonl.
+
+6. INGESTION CODE: REVIEWED, NOT YET FIXED OR RUN
+
+The current ingest.py was inspected.
+
+It currently:
+
+-   Reads data/pages.jsonl.
+-   Expects each record to contain url, title, text, and optionally
+    site.
+-   Uses RecursiveCharacterTextSplitter.
+-   Uses chunk size 800 characters and overlap 100 characters.
+-   Uses the embedding model BAAI/bge-small-en-v1.5 through FastEmbed.
+-   Creates a FAISS vector store.
+-   Saves the index to data/index.
+
+The main issue is a data-format mismatch:
+
+The real DarGlobal JSONL file is data/full_dataset.jsonl and has fields:
+id, company, category, title, text, source_url.
+
+But ingest.py currently reads data/pages.jsonl and expects a field named
+“url”. The real dataset uses “source_url”.
+
+Therefore, the current ingest.py cannot yet correctly index the verified
+DarGlobal dataset without being updated.
+
+The two placeholder records in data/pages.jsonl are not sufficient for
+building the real project index.
+
+Do not run ingestion until the loader is updated to support the actual
+DarGlobal and Wasalt dataset formats and their output paths.
+
+7. INITIAL CHATBOT CODE: INSPECTED, NOT FULLY VERIFIED
+
+The following application files exist:
+
+-   app/graph.py
+-   app/main.py
+-   app/tracking.py
+-   app/static/index.html
+
+The initial app scaffold appears to include:
+
+-   Query routing for different types of user questions.
+-   Query rewriting.
+-   FAISS retrieval.
+-   LLM answer generation.
+-   Source URL handling.
+-   FastAPI endpoints, including /health and /chat.
+-   A basic browser chat page.
+
+The graph code appears to expect a FAISS index at data/index.
+
+The application has not yet been confirmed working end-to-end with the
+6,144 DarGlobal records or with the final Wasalt dataset.
+
+Next, inspect the code and align its expected metadata fields with the
+metadata saved during ingestion.
+
+8. REQUIREMENTS: UPDATED LIST PREPARED, INSTALLATION NOT CONFIRMED
+
+A consolidated requirements list was prepared for the project. It
+includes:
+
+-   FastAPI and Uvicorn
+-   Pydantic
+-   Requests, HTTPX, BeautifulSoup, lxml, Playwright
+-   LangChain packages
+-   LangGraph
+-   LangSmith
+-   FastEmbed
+-   FAISS CPU
+-   tiktoken
+-   Tenacity
+-   MLflow
+-   python-dotenv
+-   orjson
+-   pytest
+-   ruff
+-   python-multipart
+
+The list was provided, but installation and compatibility checks have
+not yet been confirmed.
+
+After saving the final requirements.txt, install and check dependencies:
+
+python -m pip install –upgrade pip pip install -r requirements.txt pip
+check
+
+If Playwright is used, install its Chromium browser:
+
+playwright install chromium
+
+A successful pip check is useful, but it does not prove that the
+application runs correctly. Runtime tests are still required.
+
+9. NEXT PROJECT STEPS: FOLLOW THIS ORDER
+
+STEP 1 - Finish Wasalt scraping - Let the currently running Wasalt crawl
+finish. - Save the final terminal output. - Inspect the Wasalt
+manifest. - Verify the number of JSONL records. - Confirm that the
+records belong to Wasalt. - Keep the DarGlobal dataset unchanged.
+
+STEP 2 - Validate both datasets - Check the JSONL structure of each
+dataset. - Check required fields such as title, text, company/site, and
+source URL. - Remove or identify empty records and duplicates. - Confirm
+the final company-wise record counts.
+
+STEP 3 - Create a unified dataset - Convert both sources to one
+consistent schema. - Keep the company name on every record. - Keep the
+source URL, title, text, and useful category metadata. - Write a
+combined JSONL file without overwriting the original datasets.
+
+STEP 4 - Fix ingestion - Update ingest.py to read the combined
+dataset. - Map source_url to the metadata URL field expected by
+retrieval. - Preserve company and category metadata. - Skip empty text
+records safely. - Add clear progress and error messages.
+
+STEP 5 - Build the FAISS index - Split documents into chunks. - Use the
+selected embedding model. - Save the FAISS index to data/index. - Verify
+that the index can be loaded again.
+
+STEP 6 - Connect the LangGraph chatbot - Confirm query routing. -
+Confirm retrieval from the FAISS index. - Confirm that retrieved sources
+include company and URL. - Connect the LLM through the configured
+OpenRouter-compatible endpoint. - Keep API keys in environment
+variables, not in source code.
+
+STEP 7 - Run the FastAPI backend - Start the app with Uvicorn. - Test
+/health. - Test /chat with questions about DarGlobal. - Test /chat with
+questions about Wasalt. - Check that answers are grounded in retrieved
+context and include sources.
+
+STEP 8 - Test the frontend - Open the chat page. - Send questions for
+both companies. - Check loading, error handling, and source display.
+
+STEP 9 - Evaluate the chatbot - Prepare test questions for both
+companies. - Check retrieval relevance and answer correctness. - Test
+questions for which the dataset has no answer. - Ensure the chatbot does
+not invent facts. - Record test results.
+
+STEP 10 - Docker and deployment - Build and test the Docker image
+locally. - Confirm environment variables and data/index handling. - Test
+the container API. - Deploy only after local testing succeeds. - Add CI
+checks if required by the assignment.
+
+10. IMPORTANT SAFETY AND PROJECT-HANDLING RULES
+
+-   Do not overwrite the verified DarGlobal dataset.
+-   Keep the Wasalt output separate until it is verified.
+-   Do not mistake discovered URLs for crawled pages.
+-   Do not mistake progress record counts for final deduplicated
+    records.
+-   Do not use placeholder data as the real training or retrieval
+    corpus.
+-   Do not bypass robots.txt, Cloudflare, login walls, or other access
+    controls.
+-   Do not put API keys in GitHub or source files.
+-   Do not claim the chatbot or deployment is complete until it has been
+    tested successfully.
+-   Keep original datasets so that the combined dataset can be
+    regenerated.
+
+11. CURRENT STATUS SUMMARY
+
+COMPLETED: - Project scaffold inspected. - Main DarGlobal crawl
+completed. - DarGlobal manifest verified. - DarGlobal JSONL record count
+verified at 6,144. - Existing ingestion code inspected. - Existing app
+files identified. - Data mismatch between ingest.py and the real dataset
+identified. - Consolidated requirements list prepared.
+
+IN PROGRESS: - Wasalt public-data crawl. - Last reported progress: 1,300
+crawled, 14,100 discovered, 5,263 records collected. These are not final
+totals.
+
+NOT YET COMPLETED / NOT VERIFIED: - Final Wasalt dataset and manifest. -
+Unified DarGlobal + Wasalt dataset. - Updated ingestion loader. - FAISS
+index built from both real datasets. - End-to-end LangGraph and LLM
+testing. - FastAPI and frontend testing. - Evaluation results. - Docker
+build and deployment.
+
+The next immediate action is to let the Wasalt crawler finish and then
+verify its final output. Continue with the remaining steps in the order
+listed above.

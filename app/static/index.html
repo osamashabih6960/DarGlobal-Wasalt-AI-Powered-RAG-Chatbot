@@ -5,487 +5,85 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#08121C">
-<title>Dar Global × Wasalt | Property Assistant</title>
+<title>DarGlobal × Wasalt | Property Assistant</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600&display=swap">
 
 <style>
 :root {
-  --bg: #08121C;
-  --panel: #0F1B29;
-  --bubble: #162A3C;
-  --gold: #D9BE85;
-  --em: #36D1A0;
-  --em-d: #0E6B55;
-  --muted: #9FB0C0;
-  --text: #EAF0F5;
-  --line: rgba(255,255,255,.1);
+  --bg:#08121C;--panel:#0F1B29;--bubble:#162A3C;
+  --gold:#D9BE85;--em:#36D1A0;--em-d:#0E6B55;
+  --muted:#9FB0C0;--text:#EAF0F5;--line:rgba(255,255,255,.1);
 }
-
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  min-height: 100%;
-}
-
-body {
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Inter, system-ui, sans-serif;
-  overflow-x: hidden;
-  position: relative;
-}
-
-button { font-family: inherit; cursor: pointer; }
-
-.wm {
-  position: fixed;
-  left: -1vw;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -.03em;
-  white-space: nowrap;
-  color: transparent;
-  pointer-events: none;
-  user-select: none;
-  font-size: 14.2vw;
-  z-index: 0;
-}
-
-.wm.a {
-  top: 5vh;
-  -webkit-text-stroke: 1.5px rgba(217,190,133,.2);
-}
-
-.wm.b {
-  top: 26vh;
-  -webkit-text-stroke: 1.5px rgba(54,209,160,.2);
-}
-
-.wm.c {
-  top: 58vh;
-  -webkit-text-stroke: 1.5px rgba(255,255,255,.07);
-}
-
-.brand-logo {
-  font-size: 23px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  color: #fff;
-  white-space: nowrap;
-}
-
-.brand-logo span {
-  font-weight: 400;
-  margin-left: 3px;
-  letter-spacing: 1px;
-}
-
-header {
-  position: relative;
-  z-index: 2;
-  min-height: 88px;
-  padding: 12px clamp(16px,5vw,72px);
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.x {
-  font-size: 24px;
-  color: #8497A8;
-}
-
-.wasalt {
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -.5px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.wasalt i {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  background: var(--em);
-  display: inline-block;
-}
-
-.sp { flex: 1; }
-
-.agent {
-  min-height: 44px;
-  padding: 0 22px;
-  border-radius: 22px;
-  background: transparent;
-  border: 1px solid var(--gold);
-  color: var(--gold);
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-}
-
-main {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  grid-template-columns: minmax(0,620px) 1fr;
-  gap: 48px;
-  padding: 0 clamp(16px,5vw,72px) 32px;
-  align-items: start;
-}
-
-.panel {
-  height: calc(100vh - 120px);
-  min-height: 560px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 26px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.ph {
-  padding: 18px 24px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-}
-
-.av {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #12806A;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-}
-
-.ph .t { flex: 1; }
-
-.ph b {
-  display: block;
-  font-size: 17px;
-  font-weight: 600;
-  color: #fff;
-}
-
-.ph small {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12.5px;
-  color: var(--muted);
-  margin-top: 3px;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #4ADE80;
-  display: inline-block;
-}
-
-.icon-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,.18);
-  display: grid;
-  place-items: center;
-}
-
-#log {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  scroll-behavior: smooth;
-}
-
-.msg {
-  max-width: 85%;
-  padding: 12px 16px;
-  font-size: 15px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-.msg.bot {
-  align-self: flex-start;
-  background: var(--bubble);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 20px 20px 20px 4px;
-}
-
-.msg.bot strong {
-  color: #fff;
-  font-weight: 700;
-}
-
-.msg.user {
-  align-self: flex-end;
-  background: var(--em-d);
-  color: #fff;
-  border-radius: 20px 20px 4px 20px;
-}
-
-.msg.err { border-color: #E5484D; }
-
-.typing {
-  align-self: flex-start;
-  background: var(--bubble);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 20px 20px 20px 4px;
-  padding: 15px 16px;
-  display: flex;
-  gap: 5px;
-}
-
-.typing span {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #8A94A0;
-  animation: typing 1.1s infinite ease-in-out;
-}
-
-.typing span:nth-child(2) { animation-delay: .15s; }
-.typing span:nth-child(3) { animation-delay: .3s; }
-
-@keyframes typing {
-  0%,80%,100% { opacity: .3; transform: translateY(0); }
-  40% { opacity: 1; transform: translateY(-4px); }
-}
-
-.chips {
-  display: flex;
-  align-items: center;
-  column-gap: 12px;
-  row-gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-}
-
-.chip {
-  min-height: 44px;
-  padding: 0 16px;
-  background: transparent;
-  border: 1px solid rgba(217,190,133,.55);
-  border-radius: 22px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--gold);
-}
-
-.chip:hover { background: rgba(217,190,133,.1); }
-
-.cards {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-  gap: 14px;
-}
-
-.card {
-  background: #12202F;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  overflow: hidden;
-}
-
-.card .img {
-  position: relative;
-  height: 96px;
-  background: #0D1926;
-  display: grid;
-  place-items: center;
-}
-
-.card .tag {
-  position: absolute;
-  left: 12px;
-  top: 12px;
-  color: #08121C;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 5px 10px;
-  border-radius: 12px;
-  background: var(--gold);
-}
-
-.card.w .tag,
-.card.w .btn { background: var(--em); }
-
-.card .body {
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.card .loc {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.card .name {
-  font-family: 'Playfair Display',serif;
-  font-weight: 600;
-  font-size: 19px;
-  color: #fff;
-}
-
-.card .spec {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.card .price {
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--gold);
-}
-
-.card.w .price { color: var(--em); }
-
-.card .btn {
-  margin-top: 6px;
-  min-height: 44px;
-  border-radius: 12px;
-  background: var(--gold);
-  color: #08121C;
-  border: 0;
-  font-size: 14px;
-  font-weight: 600;
-  display: grid;
-  place-items: center;
-  text-decoration: none;
-}
-
-.src {
-  font-size: 12px;
-  color: var(--muted);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 12px;
-  line-height: 1.6;
-}
-
-.src a {
-  color: var(--gold);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-form {
-  padding: 16px 24px 24px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  display: flex;
-  gap: 12px;
-}
-
-input {
-  flex: 1;
-  min-width: 0;
-  height: 52px;
-  border-radius: 26px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: #0A1520;
-  color: #fff;
-  padding: 0 22px;
-  font: inherit;
-  font-size: 15px;
-}
-
-input::placeholder { color: #8497A8; }
-
-input:focus-visible,
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid var(--em);
-  outline-offset: 2px;
-}
-
-.send {
-  width: 52px;
-  height: 52px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--gold);
-  border: 0;
-  display: grid;
-  place-items: center;
-}
-
-.send:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
-
-.note {
-  font-size: 11.5px;
-  color: var(--muted);
-  padding: 0 24px 14px;
-  margin-top: -10px;
-  line-height: 1.5;
-}
-
-.city {
-  width: 100%;
-  max-width: 600px;
-  height: auto;
-  justify-self: center;
-  margin-top: 8px;
-}
-
-@media(max-width:980px) {
-  main { grid-template-columns: 1fr; }
-  .city, .wm { display: none; }
-  .panel { height: calc(100vh - 110px); min-height: 500px; }
-  .agent { display: none; }
-}
-
-@media(max-width:480px) {
-  header { gap: 12px; min-height: 76px; }
-  .brand-logo { font-size: 18px; }
-  .wasalt { font-size: 22px; }
-  .x { font-size: 20px; }
-  main { padding-left: 10px; padding-right: 10px; }
-  .panel { border-radius: 18px; }
-  .ph { padding: 14px; }
-  #log { padding: 16px; }
-  form { padding: 12px 14px 18px; }
-  .note { padding-left: 14px; padding-right: 14px; }
-  .msg { max-width: 94%; font-size: 14px; }
-}
-
-@media(prefers-reduced-motion:reduce) {
-  .typing span { animation: none; }
-  #log { scroll-behavior: auto; }
-}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{min-height:100vh;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;position:relative}
+button{font-family:inherit;cursor:pointer}
+.wm{position:fixed;left:-1vw;font-weight:800;line-height:1;letter-spacing:-.03em;white-space:nowrap;color:transparent;pointer-events:none;user-select:none;font-size:14.2vw;z-index:0}
+.wm.a{top:5vh;-webkit-text-stroke:1.5px rgba(217,190,133,.2)}
+.wm.b{top:26vh;-webkit-text-stroke:1.5px rgba(54,209,160,.2)}
+.wm.c{top:58vh;-webkit-text-stroke:1.5px rgba(255,255,255,.07)}
+.brand-logo{font-size:23px;font-weight:800;letter-spacing:2px;color:#fff;white-space:nowrap}
+.brand-logo span{font-weight:400;margin-left:3px;letter-spacing:1px}
+header{position:relative;z-index:2;min-height:88px;padding:12px clamp(16px,5vw,72px);display:flex;align-items:center;gap:20px}
+.x{font-size:24px;color:#8497A8}
+.wasalt{font-size:28px;font-weight:700;letter-spacing:-.5px;color:#fff;display:flex;align-items:center;gap:8px}
+.wasalt i{width:10px;height:10px;border-radius:2px;background:var(--em);display:inline-block}
+.sp{flex:1}
+.agent{min-height:44px;padding:0 22px;border-radius:22px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center}
+main{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,620px) 1fr;gap:48px;padding:0 clamp(16px,5vw,72px) 32px;align-items:start}
+.panel{height:calc(100vh - 120px);min-height:560px;background:var(--panel);border:1px solid var(--line);border-radius:26px;display:flex;flex-direction:column;overflow:hidden}
+.ph{padding:18px 24px;display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.av{width:44px;height:44px;border-radius:50%;background:#12806A;display:grid;place-items:center;flex-shrink:0}
+.ph .t{flex:1}
+.ph b{display:block;font-size:17px;font-weight:600;color:#fff}
+.ph small{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);margin-top:3px}
+.dot{width:8px;height:8px;border-radius:50%;background:#4ADE80;display:inline-block}
+.icon-btn{width:44px;height:44px;border-radius:50%;background:transparent;border:1px solid rgba(255,255,255,.18);display:grid;place-items:center}
+#log{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+.msg{max-width:85%;padding:12px 16px;font-size:15px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.bot{align-self:flex-start;background:var(--bubble);border:1px solid rgba(255,255,255,.08);border-radius:20px 20px 20px 4px}
+.msg.bot strong{color:#fff;font-weight:700}
+.msg.user{align-self:flex-end;background:var(--em-d);color:#fff;border-radius:20px 20px 4px 20px}
+.msg.err{border-color:#E5484D}
+.typing{align-self:flex-start;background:var(--bubble);border:1px solid rgba(255,255,255,.08);border-radius:20px 20px 20px 4px;padding:15px 16px;display:flex;gap:5px}
+.typing span{width:7px;height:7px;border-radius:50%;background:#8A94A0;animation:typing 1.1s infinite ease-in-out}
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+@keyframes typing{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-4px)}}
+.chips{display:flex;align-items:center;column-gap:12px;row-gap:12px;flex-wrap:wrap;margin-top:14px}
+.chip{min-height:44px;padding:0 16px;background:transparent;border:1px solid rgba(217,190,133,.55);border-radius:22px;font-size:13px;font-weight:500;color:var(--gold)}
+.chip:hover{background:rgba(217,190,133,.1)}
+.cards{width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card{background:#12202F;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.card .img{position:relative;height:96px;background:#0D1926;display:grid;place-items:center}
+.card .tag{position:absolute;left:12px;top:12px;color:#08121C;font-size:11px;font-weight:700;letter-spacing:1px;padding:5px 10px;border-radius:12px;background:var(--gold)}
+.card.w .tag,.card.w .btn{background:var(--em)}
+.card .body{padding:14px;display:flex;flex-direction:column;gap:7px}
+.card .loc{font-size:12px;color:var(--muted)}
+.card .name{font-family:'Playfair Display',serif;font-weight:600;font-size:19px;color:#fff}
+.card .spec{font-size:13px;color:var(--muted)}
+.card .price{font-size:17px;font-weight:600;color:var(--gold)}
+.card.w .price{color:var(--em)}
+.card .btn{margin-top:6px;min-height:44px;border-radius:12px;background:var(--gold);color:#08121C;border:0;font-size:14px;font-weight:600;display:grid;place-items:center;text-decoration:none}
+.src{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 12px;line-height:1.6}
+.src a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+form{padding:16px 24px 24px;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:12px}
+input{flex:1;min-width:0;height:52px;border-radius:26px;border:1px solid rgba(255,255,255,.16);background:#0A1520;color:#fff;padding:0 22px;font:inherit;font-size:15px}
+input::placeholder{color:#8497A8}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--em);outline-offset:2px}
+.send{width:52px;height:52px;flex-shrink:0;border-radius:50%;background:var(--gold);border:0;display:grid;place-items:center}
+.send:disabled{opacity:.5;cursor:not-allowed}
+.note{font-size:11.5px;color:var(--muted);padding:0 24px 14px;margin-top:-10px;line-height:1.5}
+.city{width:100%;max-width:600px;height:auto;justify-self:center;margin-top:8px}
+@media(max-width:980px){main{grid-template-columns:1fr}.city,.wm{display:none}.panel{height:calc(100vh - 110px);min-height:500px}.agent{display:none}}
+@media(max-width:480px){header{gap:12px;min-height:76px}.brand-logo{font-size:18px}.wasalt{font-size:22px}.x{font-size:20px}main{padding-left:10px;padding-right:10px}.panel{border-radius:18px}.ph{padding:14px}#log{padding:16px}form{padding:12px 14px 18px}.note{padding-left:14px;padding-right:14px}.msg{max-width:94%;font-size:14px}}
+@media(prefers-reduced-motion:reduce){.typing span{animation:none}#log{scroll-behavior:auto}}
 </style>
 </head>
 
 <body>
-
 <div class="wm a" aria-hidden="true">DARGLOBAL</div>
 <div class="wm b" aria-hidden="true">× WASALT</div>
 <div class="wm c" aria-hidden="true">DARGLOBAL</div>
@@ -500,27 +98,19 @@ a:focus-visible {
 
 <main>
 <section class="panel" aria-label="Property assistant chat">
-
   <div class="ph">
     <div class="av">
-      <svg width="22" height="22" viewBox="0 0 24 24"
-           fill="none" stroke="#fff" stroke-width="1.8"
-           stroke-linecap="round" stroke-linejoin="round"
-           aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M4 21V5l8-3 8 3v16"/>
         <path d="M9 21v-5h6v5M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/>
       </svg>
     </div>
-
     <div class="t">
       <b>Property Assistant</b>
-      <small><span class="dot"></span>Online · Dar Global and Wasalt listings</small>
+      <small><span class="dot"></span>Online · DarGlobal and Wasalt listings</small>
     </div>
-
-    <button class="icon-btn" id="reset" aria-label="New chat">
-      <svg width="20" height="20" viewBox="0 0 24 24"
-           fill="none" stroke="#fff" stroke-width="1.8"
-           stroke-linecap="round" aria-hidden="true">
+    <button class="icon-btn" id="reset" aria-label="New chat" type="button">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
         <path d="M12 5v14M5 12h14"/>
       </svg>
     </button>
@@ -529,116 +119,63 @@ a:focus-visible {
   <div id="log" role="log" aria-live="polite"></div>
 
   <div class="note">
-    Answers are generated from public Dar Global and Wasalt data.
+    Answers are generated from public DarGlobal and Wasalt data.
     Please confirm prices and availability with the sales team.
   </div>
 
   <form id="form" autocomplete="off">
-    <label for="msg"
-      style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">
-      Message
-    </label>
-
-    <input id="msg"
-           placeholder="Ask about a property..."
-           maxlength="1000">
-
+    <label for="msg" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Message</label>
+    <input id="msg" placeholder="Ask about a property..." maxlength="1000">
     <button class="send" id="send" aria-label="Send" type="submit">
-      <svg width="22" height="22" viewBox="0 0 24 24"
-           fill="none" stroke="#08121C" stroke-width="2.2"
-           stroke-linecap="round" stroke-linejoin="round"
-           aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#08121C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M5 12h14M13 6l6 6-6 6"/>
       </svg>
     </button>
   </form>
-
 </section>
 
-<!-- Decorative city illustration -->
-<svg viewBox="0 0 600 650" class="city"
-     role="img" aria-label="Isometric illustration of luxury city buildings">
-
+<svg viewBox="0 0 600 650" class="city" role="img" aria-label="Isometric illustration of luxury city buildings">
   <ellipse cx="300" cy="615" rx="270" ry="28" fill="#000" opacity=".3"/>
-
-  <polygon points="300,580 50,435 300,290 550,435"
-           fill="#14283B" stroke="#D9BE85" stroke-opacity=".35"/>
-
-  <path d="M300 580L50 435M300 580L550 435"
-        stroke="#D9BE85" stroke-opacity=".25" fill="none"/>
-
-  <!-- Main tower -->
-  <polygon points="300,450 235,412 235,105 300,143"
-           fill="#5E6E7E" stroke="#fff" stroke-opacity=".2"/>
-  <polygon points="300,450 365,412 365,105 300,143"
-           fill="#A5B3C1" stroke="#fff" stroke-opacity=".2"/>
-  <polygon points="300,143 235,105 300,68 365,105"
-           fill="#E6ECF1"/>
-
+  <polygon points="300,580 50,435 300,290 550,435" fill="#14283B" stroke="#D9BE85" stroke-opacity=".35"/>
+  <path d="M300 580L50 435M300 580L550 435" stroke="#D9BE85" stroke-opacity=".25" fill="none"/>
+  <polygon points="300,450 235,412 235,105 300,143" fill="#5E6E7E" stroke="#fff" stroke-opacity=".2"/>
+  <polygon points="300,450 365,412 365,105 300,143" fill="#A5B3C1" stroke="#fff" stroke-opacity=".2"/>
+  <polygon points="300,143 235,105 300,68 365,105" fill="#E6ECF1"/>
   <g fill="#FFE8AE" opacity=".9">
     <path d="M250 150v250l8 5V155zM270 162v250l8 5V167zM290 174v250l8 5V179z"/>
     <path d="M310 179v245l8-5V174zM330 167v245l8-5V162zM350 155v245l8-5V150z"/>
   </g>
-
-  <!-- Gold tower -->
-  <polygon points="420,495 365,463 365,275 420,307"
-           fill="#7A5F26" stroke="#fff" stroke-opacity=".2"/>
-  <polygon points="420,495 480,460 480,275 420,307"
-           fill="#BF9B50" stroke="#fff" stroke-opacity=".2"/>
-  <polygon points="420,307 365,275 425,240 480,275"
-           fill="#F2DCA4"/>
-
+  <polygon points="420,495 365,463 365,275 420,307" fill="#7A5F26" stroke="#fff" stroke-opacity=".2"/>
+  <polygon points="420,495 480,460 480,275 420,307" fill="#BF9B50" stroke="#fff" stroke-opacity=".2"/>
+  <polygon points="420,307 365,275 425,240 480,275" fill="#F2DCA4"/>
   <g fill="#fff" opacity=".22">
     <path d="M382 300v160l8 5V305zM400 312v160l8 5V317zM438 317v160l8-5V312zM456 305v160l8-5V300z"/>
   </g>
-
-  <!-- Green tower -->
-  <polygon points="195,510 145,480 145,270 195,300"
-           fill="#0A5644" stroke="#fff" stroke-opacity=".2"/>
-  <polygon points="195,510 255,475 255,270 195,300"
-           fill="#12806A" stroke="#fff" stroke-opacity=".2"/>
-  <polygon points="195,300 145,270 200,238 255,270"
-           fill="#36D1A0"/>
-
+  <polygon points="195,510 145,480 145,270 195,300" fill="#0A5644" stroke="#fff" stroke-opacity=".2"/>
+  <polygon points="195,510 255,475 255,270 195,300" fill="#12806A" stroke="#fff" stroke-opacity=".2"/>
+  <polygon points="195,300 145,270 200,238 255,270" fill="#36D1A0"/>
   <g fill="#FFE8AE" opacity=".8">
     <path d="M160 290v175l7 4V294zM180 302v175l7 4V306zM215 306v170l7-4V302zM235 294v170l7-4V290z"/>
   </g>
-
-  <!-- Foreground building -->
-  <polygon points="300,565 240,530 240,420 300,455"
-           fill="#0A5644" stroke="#fff" stroke-opacity=".2"/>
-  <polygon points="300,565 360,530 360,420 300,455"
-           fill="#12806A" stroke="#fff" stroke-opacity=".2"/>
-  <polygon points="300,455 240,420 300,385 360,420"
-           fill="#36D1A0"/>
-
+  <polygon points="300,565 240,530 240,420 300,455" fill="#0A5644" stroke="#fff" stroke-opacity=".2"/>
+  <polygon points="300,565 360,530 360,420 300,455" fill="#12806A" stroke="#fff" stroke-opacity=".2"/>
+  <polygon points="300,455 240,420 300,385 360,420" fill="#36D1A0"/>
   <g fill="#fff" opacity=".2">
     <path d="M260 435v95l7 4v-95zM280 447v95l7 4v-95zM315 447v95l7-4v-95zM335 435v95l7-4v-95z"/>
   </g>
-
   <path d="M300 68V28" stroke="#D9BE85" stroke-width="2"/>
   <circle cx="300" cy="25" r="4" fill="#D9BE85"/>
-
-  <rect x="380" y="28" width="125" height="30" rx="15"
-        fill="#08121C" stroke="#D9BE85"/>
-  <text x="442" y="48" text-anchor="middle"
-        font-family="Inter,sans-serif" font-size="12"
-        font-weight="700" letter-spacing="1.5"
-        fill="#D9BE85">DAR GLOBAL</text>
-
-  <rect x="15" y="195" width="100" height="30" rx="15"
-        fill="#08121C" stroke="#36D1A0"/>
-  <text x="65" y="215" text-anchor="middle"
-        font-family="Inter,sans-serif" font-size="12"
-        font-weight="700" letter-spacing="1.5"
-        fill="#36D1A0">WASALT</text>
+  <rect x="380" y="28" width="125" height="30" rx="15" fill="#08121C" stroke="#D9BE85"/>
+  <text x="442" y="48" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" letter-spacing="1.5" fill="#D9BE85">DAR GLOBAL</text>
+  <rect x="15" y="195" width="100" height="30" rx="15" fill="#08121C" stroke="#36D1A0"/>
+  <text x="65" y="215" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" letter-spacing="1.5" fill="#36D1A0">WASALT</text>
 </svg>
-
 </main>
 
 <script>
-const API_URL = "/api/chat";
+"use strict";
 
+const API_URL = "/api/chat";
 const log = document.getElementById("log");
 const form = document.getElementById("form");
 const input = document.getElementById("msg");
@@ -656,27 +193,26 @@ const QUICK = [
 let history = [];
 let busy = false;
 
-const el = (tag, cls, text) => {
-  const n = document.createElement(tag);
-  if (cls) n.className = cls;
-  if (text != null) n.textContent = text;
-  return n;
-};
+function el(tag, cls, text) {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text !== undefined && text !== null) node.textContent = text;
+  return node;
+}
 
-const safeUrl = u => {
+function safeUrl(value) {
   try {
-    const x = new URL(u, location.href);
-    return /^https?:$/.test(x.protocol) ? x.href : null;
+    const url = new URL(value, window.location.href);
+    return ["http:", "https:"].includes(url.protocol) ? url.href : null;
   } catch {
     return null;
   }
-};
+}
 
-const scroll = () => {
+function scrollToBottom() {
   log.scrollTop = log.scrollHeight;
-};
+}
 
-/* Common text encoding cleanup */
 function repairText(value) {
   return String(value ?? "")
     .replace(/\\\*/g, "*")
@@ -687,12 +223,13 @@ function repairText(value) {
     .replace(/â€œ/g, "“")
     .replace(/â€/g, "”")
     .replace(/â€“/g, "–")
-    .replace(/â€”/g, "—");
+    .replace(/â€”/g, "—")
+    .replace(/Â/g, "");
 }
 
-/* Render messages safely and format **bold** text */
+/* Safely display text and simple **bold** Markdown. */
 function addMsg(role, text, extra) {
-  const m = el(
+  const message = el(
     "div",
     "msg " + role + (extra ? " " + extra : "")
   );
@@ -706,148 +243,141 @@ function addMsg(role, text, extra) {
       if (index % 2 === 1) {
         const strong = document.createElement("strong");
         strong.textContent = part;
-        m.appendChild(strong);
+        message.appendChild(strong);
       } else {
-        m.appendChild(document.createTextNode(part));
+        message.appendChild(document.createTextNode(part));
       }
     });
   } else {
-    m.textContent = normalized;
+    message.textContent = normalized;
   }
 
-  log.appendChild(m);
-  scroll();
-
-  return m;
+  log.appendChild(message);
+  scrollToBottom();
+  return message;
 }
 
-/* Quick question buttons */
 function addChips(items) {
-  const w = el("div", "chips");
+  const wrapper = el("div", "chips");
 
-  items.forEach(t => {
-    const b = el("button", "chip", t);
-    b.type = "button";
-
-    b.onclick = () => {
-      w.remove();
-      send(t);
-    };
-
-    w.appendChild(b);
+  items.forEach(question => {
+    const button = el("button", "chip", question);
+    button.type = "button";
+    button.addEventListener("click", () => {
+      wrapper.remove();
+      send(question);
+    });
+    wrapper.appendChild(button);
   });
 
-  log.appendChild(w);
-  scroll();
+  log.appendChild(wrapper);
+  scrollToBottom();
 }
 
-/* Property cards */
 function addCards(cards) {
-  const wrap = el("div", "cards");
+  if (!Array.isArray(cards) || !cards.length) return;
 
-  cards.forEach(c => {
-    const isW = /wasalt/i.test(c.company || "");
-    const card = el("div", "card" + (isW ? " w" : ""));
-    const img = el("div", "img");
+  const wrapper = el("div", "cards");
 
-    img.appendChild(
-      el("span", "tag", (c.company || "").toUpperCase())
+  cards.forEach(cardData => {
+    const isWasalt = /wasalt/i.test(cardData.company || "");
+    const card = el("div", "card" + (isWasalt ? " w" : ""));
+    const image = el("div", "img");
+
+    image.appendChild(
+      el("span", "tag", (cardData.company || "").toUpperCase())
     );
 
-    const f = isW
-      ? ["#36D1A0","#0A5644","#12806A"]
-      : ["#F2DCA4","#7A5F26","#BF9B50"];
+    const colors = isWasalt
+      ? ["#36D1A0", "#0A5644", "#12806A"]
+      : ["#F2DCA4", "#7A5F26", "#BF9B50"];
 
-    img.insertAdjacentHTML(
+    image.insertAdjacentHTML(
       "beforeend",
       `<svg width="56" height="56" viewBox="0 0 60 60" aria-hidden="true">
-        <polygon points="30,10 52,22 30,34 8,22" fill="${f[0]}"/>
-        <polygon points="8,22 30,34 30,56 8,44" fill="${f[1]}"/>
-        <polygon points="30,34 52,22 52,44 30,56" fill="${f[2]}"/>
+        <polygon points="30,10 52,22 30,34 8,22" fill="${colors[0]}"/>
+        <polygon points="8,22 30,34 30,56 8,44" fill="${colors[1]}"/>
+        <polygon points="30,34 52,22 52,44 30,56" fill="${colors[2]}"/>
       </svg>`
     );
 
     const body = el("div", "body");
 
-    if (c.location) {
-      body.appendChild(el("div", "loc", repairText(c.location)));
+    if (cardData.location) {
+      body.appendChild(el("div", "loc", repairText(cardData.location)));
     }
 
     body.appendChild(
-      el("div", "name", repairText(c.title || "Property"))
+      el("div", "name", repairText(cardData.title || "Property"))
     );
 
-    if (c.specs) {
-      body.appendChild(el("div", "spec", repairText(c.specs)));
+    if (cardData.specs) {
+      body.appendChild(el("div", "spec", repairText(cardData.specs)));
     }
 
-    if (c.price) {
-      body.appendChild(el("div", "price", repairText(c.price)));
+    if (cardData.price) {
+      body.appendChild(el("div", "price", repairText(cardData.price)));
     }
 
-    const u = safeUrl(c.url);
+    const url = safeUrl(cardData.url);
 
-    if (u) {
-      const a = el("a", "btn", "View details");
-      a.href = u;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      body.appendChild(a);
+    if (url) {
+      const link = el("a", "btn", "View details");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      body.appendChild(link);
     }
 
-    card.append(img, body);
-    wrap.appendChild(card);
+    card.append(image, body);
+    wrapper.appendChild(card);
   });
 
-  log.appendChild(wrap);
-  scroll();
+  log.appendChild(wrapper);
+  scrollToBottom();
 }
 
-/* Source links */
-function addSources(list) {
-  const items = (list || [])
-    .map(s => ({
-      title: repairText(
-        s.title || s.source_url || s.url || "Source"
-      ),
-      url: safeUrl(s.url || s.source_url)
-    }))
-    .filter(s => s.url);
+function addSources(sources) {
+  if (!Array.isArray(sources)) return;
+
+  const items = sources.map(source => ({
+    title: repairText(
+      source.title || source.source_url || source.url || "Source"
+    ),
+    url: safeUrl(source.url || source.source_url)
+  })).filter(source => source.url);
 
   if (!items.length) return;
 
-  const w = el("div", "src");
-  w.appendChild(el("span", null, "Sources:"));
+  const wrapper = el("div", "src");
+  wrapper.appendChild(el("span", null, "Sources:"));
 
-  items.slice(0, 4).forEach(s => {
-    const title = s.title.length > 40
-      ? s.title.slice(0, 40) + "…"
-      : s.title;
+  items.slice(0, 4).forEach(source => {
+    const title = source.title.length > 40
+      ? source.title.slice(0, 40) + "…"
+      : source.title;
 
-    const a = el("a", null, title);
-    a.href = s.url;
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-
-    w.appendChild(a);
+    const link = el("a", null, title);
+    link.href = source.url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    wrapper.appendChild(link);
   });
 
-  log.appendChild(w);
-  scroll();
+  log.appendChild(wrapper);
+  scrollToBottom();
 }
 
-/* Loading state */
-function setBusy(v) {
-  busy = v;
-  sendBtn.disabled = v;
-  input.disabled = v;
+function setBusy(value) {
+  busy = value;
+  sendBtn.disabled = value;
+  input.disabled = value;
 
-  if (!v) input.focus();
+  if (!value) input.focus();
 }
 
-/* Send message to FastAPI backend */
 async function send(text) {
-  text = (text || "").trim();
+  text = String(text || "").trim();
 
   if (!text || busy) return;
 
@@ -858,46 +388,40 @@ async function send(text) {
   const typing = el("div", "typing");
   typing.setAttribute("aria-label", "Assistant is typing");
   typing.innerHTML = "<span></span><span></span><span></span>";
-
   log.appendChild(typing);
-  scroll();
+  scrollToBottom();
 
   try {
-    const r = await fetch(API_URL, {
+    const response = await fetch(API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         message: text,
         history: history.slice(-10)
       })
     });
 
-    if (!r.ok) {
-      throw new Error("HTTP " + r.status);
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
     }
 
-    const d = await r.json();
+    const data = await response.json();
     typing.remove();
 
     const answer =
-      d.answer ||
-      d.response ||
-      d.reply ||
+      data.answer ||
+      data.response ||
+      data.reply ||
       "Sorry, I could not find that in the available data.";
 
     addMsg("bot", answer);
 
-    if (Array.isArray(d.cards) && d.cards.length) {
-      addCards(d.cards);
-    }
-
-    addSources(d.sources);
+    if (Array.isArray(data.cards)) addCards(data.cards);
+    addSources(data.sources);
 
     history.push(
-      { role: "user", content: text },
-      { role: "assistant", content: answer }
+      {role: "user", content: text},
+      {role: "assistant", content: answer}
     );
 
     addChips([
@@ -906,7 +430,7 @@ async function send(text) {
       "Book a site visit"
     ]);
 
-  } catch (e) {
+  } catch (error) {
     typing.remove();
 
     addMsg(
@@ -915,42 +439,38 @@ async function send(text) {
       "err"
     );
 
-    console.error("Chat API error:", e);
+    console.error("Chat API error:", error);
 
   } finally {
     setBusy(false);
   }
 }
 
-/* Start or reset chat */
 function start() {
   log.innerHTML = "";
   history = [];
 
   addMsg(
     "bot",
-    "Hi! I can help you explore Dar Global and Wasalt properties. Ask me about projects, prices, payment plans or locations."
+    "Hi! I can help you explore DarGlobal and Wasalt properties. Ask me about projects, prices, payment plans or locations."
   );
 
   addChips(QUICK);
 }
 
-/* Event listeners */
-form.addEventListener("submit", e => {
-  e.preventDefault();
+form.addEventListener("submit", event => {
+  event.preventDefault();
   send(input.value);
 });
 
-document.getElementById("reset").onclick = start;
+document.getElementById("reset").addEventListener("click", start);
 
-document.getElementById("agent").onclick = e => {
-  e.preventDefault();
+document.getElementById("agent").addEventListener("click", event => {
+  event.preventDefault();
   send("I would like to talk to an agent");
-};
+});
 
-/* Initialize chatbot */
 start();
 </script>
-
 </body>
 </html>

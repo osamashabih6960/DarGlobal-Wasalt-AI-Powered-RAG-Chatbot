@@ -91,7 +91,6 @@ with gr.Blocks(
     chatbot = gr.Chatbot(
         height=500,
         label="AI Assistant",
-        show_copy_button=True,
     )
 
     with gr.Row():

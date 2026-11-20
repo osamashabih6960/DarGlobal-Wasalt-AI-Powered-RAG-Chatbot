@@ -1,7 +1,7 @@
 [
     {
         "question": "What does DarGlobal do?",
-        "answer": "DarGlobal is a premier international **luxury real estate developer** that creates and invests in architecturally distinctive, design‑led residences in the world’s most sought‑after destinations. It develops, markets and sells luxury properties, positioning itself as a platform for high‑end real‑estate investment.【Source 2】【Source 6】",
+        "answer": "DarGlobal is a premier international **luxury real estate developer** that designs, builds and sells architecturally distinctive, design‑led residences in the world’s most sought‑after destinations. It is listed on the London Stock Exchange, partners with agents to market premium investment properties, and offers tokenized investment options for global clients.",
         "expected_keywords": [
             "luxury real estate",
             "developer"
@@ -15,12 +15,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 10,
-        "latency_seconds": 1.798,
+        "latency_seconds": 1.075,
         "status": "PASS"
     },
     {
         "question": "In which countries and markets does DarGlobal operate?",
-        "answer": "DarGlobal is headquartered in London and operates across 14 cities in 9 countries. The countries explicitly mentioned are:\n\n- Spain  \n- United Kingdom (UK)  \n- United Arab Emirates (UAE)  \n- Oman  \n- Qatar  \n- Saudi Arabia  \n- Greece  \n- Maldives  \n\nThese locations represent the markets where DarGlobal conducts its luxury real‑estate activities.",
+        "answer": "DarGlobal is headquartered in London and operates in 14 cities across 9 countries. The countries explicitly mentioned in the public pages are:\n\n- Spain  \n- United Kingdom (UK)  \n- United Arab Emirates (UAE)  \n- Oman  \n- Qatar  \n- Saudi Arabia  \n- Greece  \n- Maldives  \n\nThese markets are part of DarGlobal’s international luxury real‑estate portfolio. (The ninth country is not listed in the available pages.)",
         "expected_keywords": [
             "Saudi Arabia",
             "Qatar"
@@ -34,12 +34,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 8,
-        "latency_seconds": 1.301,
+        "latency_seconds": 1.189,
         "status": "PASS"
     },
     {
         "question": "What type of properties does DarGlobal develop?",
-        "answer": "DarGlobal is a **luxury real estate developer** that creates architecturally distinctive residential and mixed‑use assets. Its portfolio includes premium luxury apartments—often in landmark towers—as well as bespoke, ultra‑luxury villas in high‑growth global locations.",
+        "answer": "DarGlobal is a **luxury real estate developer** that creates architecturally distinctive residential and mixed‑use assets. Its portfolio includes premium luxury apartments in cities such as Dubai and Qatar, as well as ultra‑luxury villas in Spain and the GCC.",
         "expected_keywords": [
             "residential",
             "mixed-use"
@@ -53,12 +53,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 6,
-        "latency_seconds": 1.218,
+        "latency_seconds": 0.914,
         "status": "PASS"
     },
     {
         "question": "What is the gross development value mentioned on DarGlobal's website?",
-        "answer": "DarGlobal’s website states that its Gross Development Value (GDV) has reached **USD 23 billion** in FY 2025, after growing from USD 7.5 billion in FY 2024【Source 1】. The site also notes that, following new developments in Saudi Arabia, the Group’s GDV is expected to rise to **approximately USD 12.5 billion**【Source 5】.",
+        "answer": "DarGlobal’s website cites two gross development‑value figures:\n\n* **USD 23 billion** – the GDV for FY 2025, after tripling from USD 7.5 billion in FY 2024【Source 1】.  \n* **Approximately USD 12.5 billion** – the GDV after the new Saudi‑Arabia developments and joint‑venture agreement announced in the same press release【Source 5】.",
         "expected_keywords": [
             "23",
             "billion"
@@ -72,12 +72,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 10,
-        "latency_seconds": 1.518,
+        "latency_seconds": 1.332,
         "status": "PASS"
     },
     {
         "question": "What new development did DarGlobal announce in Jeddah?",
-        "answer": "DarGlobal announced plans for a **new mixed‑use development in Jeddah, Saudi Arabia**, with an estimated gross development value of **SAR 1 billion**【Source 1】【Source 3】.",
+        "answer": "DarGlobal announced plans for a new mixed‑use development in Jeddah, Saudi Arabia, with an estimated gross development value of about SAR 1 billion.",
         "expected_keywords": [
             "Jeddah",
             "SAR 1 billion"
@@ -91,12 +91,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 7,
-        "latency_seconds": 1.317,
+        "latency_seconds": 0.801,
         "status": "PASS"
     },
     {
         "question": "Which organization partnered with DarGlobal for Trump International Simaisma?",
-        "answer": "DarGlobal partnered with **The Trump Organization** and **Qatari Diar** to develop Trump International Simaisma in Qatar【Source 1】.",
+        "answer": "DarGlobal partnered with **The Trump Organization** (in collaboration with Qatari Diar) to develop Trump International Simaisma in Qatar【Source 1】.",
         "expected_keywords": [
             "Trump Organization",
             "Qatar"
@@ -110,12 +110,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 10,
-        "latency_seconds": 1.564,
+        "latency_seconds": 1.32,
         "status": "PASS"
     },
     {
         "question": "What are Trump Villas in Simaisma?",
-        "answer": "Trump Villas in Simaisma are part of the **Trump International Simaisma** development on Qatar’s eastern coast. The project, delivered by DarGlobal—a luxury real estate developer—in collaboration with The Trump Organization and Qatari Diar, is set within the 8 million sqm Simaisma destination and is surrounded by 7 km of waterfront. The villas are offered in Classical, Andalusian and Contemporary designs and range from **3‑ to 5‑bedroom** units. All units are currently **under development**.",
+        "answer": "Trump Villas in Simaisma are part of the **Trump International Simaisma** development on Qatar’s eastern coast. The project, delivered by DarGlobal in collaboration with The Trump Organization and Qatari Diar, is set within the 8 million sqm Simaisma destination and is surrounded by 7 km of waterfront. The villas are offered in Classical, Andalusian and Contemporary styles and are available as 3‑ to 5‑bedroom units that are currently under development. Residents will have access to leisure, hospitality, entertainment, golf, marina, dining and retail experiences within the development.",
         "expected_keywords": [
             "Trump Villas",
             "Qatar"
@@ -129,12 +129,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 5,
-        "latency_seconds": 1.276,
+        "latency_seconds": 1.133,
         "status": "PASS"
     },
     {
         "question": "What revenue growth did DarGlobal report in HY 2026?",
-        "answer": "DarGlobal reported a 66% revenue increase in the first half of 2026, with revenue rising to US $258.0 million (up from US $155.4 million in HY 2025)【Source 7】.",
+        "answer": "DarGlobal reported a **66% revenue increase** in the first half of 2026, with revenue rising to US $258.0 million (up from US $155.4 million in HY 2025)【Source 7】.",
         "expected_keywords": [
             "66%",
             "revenue"
@@ -148,12 +148,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 8,
-        "latency_seconds": 1.006,
+        "latency_seconds": 0.881,
         "status": "PASS"
     },
     {
         "question": "Which contractor was appointed for Trump International Hotel and Tower Dubai?",
-        "answer": "DarGlobal appointed two contractors for the Trump International Hotel & Tower, Dubai:\n\n* **Edrafor Emirates LLC** – awarded the **enabling‑works contract** for the development.【Source 3】  \n* **Gulf Asia Contracting** – appointed to carry out the **podium construction** of the tower.【Source 4】",
+        "answer": "DarGlobal appointed **Edrafor Emirates LLC** to carry out the enabling‑works contract for Trump International Hotel & Tower, Dubai, and later appointed **Gulf Asia Contracting** to handle the podium construction of the same development.",
         "expected_keywords": [
             "Gulf Asia Contracting",
             "Dubai"
@@ -167,7 +167,7 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 3,
-        "latency_seconds": 1.053,
+        "latency_seconds": 0.942,
         "status": "PASS"
     },
     {
@@ -188,12 +188,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 5,
-        "latency_seconds": 1.277,
+        "latency_seconds": 0.96,
         "status": "PASS"
     },
     {
         "question": "What is Wasalt?",
-        "answer": "Wasalt is a leading AI‑backed PropTech platform in Saudi Arabia that offers electronic real‑estate services. It provides verified **properties** for sale, rent, purchase, investment and other transactions, and connects users with trusted brokers and property experts across the Kingdom.",
+        "answer": "Wasalt is a leading AI‑backed PropTech platform in **Saudi Arabia** that provides electronic real‑estate services. It offers verified **properties** for sale and rent, helping buyers, renters, sellers and brokers discover opportunities and connect with property experts across the Kingdom.",
         "expected_keywords": [
             "properties",
             "Saudi Arabia"
@@ -207,12 +207,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 10,
-        "latency_seconds": 1.668,
+        "latency_seconds": 1.466,
         "status": "PASS"
     },
     {
         "question": "What can users do on Wasalt?",
-        "answer": "Users can browse and search verified properties for sale or rent across Saudi Arabia, filter listings by location, price, type (e.g., apartments, villas, rest houses) and other criteria, and compare options. Through each listing they can contact the agent or developer directly via WhatsApp, phone or messaging, schedule viewings, ask questions, and ultimately buy, rent, sell or invest in a property. The AI‑backed Wasalt platform also provides market insights and connects users with trusted brokers and property experts through its web site and mobile application.",
+        "answer": "Users can:\n\n* Browse and search verified **properties** (apartments, villas, rest houses, etc.) for sale or rent across Saudi Arabia.  \n* Filter listings by location, price, property type and other criteria.  \n* View detailed listings that include direct contact details for the agent or developer and reach them via WhatsApp, phone or platform messaging to schedule tours or ask questions.  \n* Connect with trusted brokers and property experts.  \n* Buy, rent, sell or invest in properties, with the platform’s AI‑backed tools providing insights and helping users explore opportunities.  \n* Use the Wasalt Application’s user‑friendly interface to compare and invest in properties nationwide.  \n\nThese capabilities are described on Wasalt’s public pages as part of its AI‑backed, Saudi‑based real‑estate platform.",
         "expected_keywords": [
             "buy",
             "rent"
@@ -226,7 +226,7 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 9,
-        "latency_seconds": 1.17,
+        "latency_seconds": 1.342,
         "status": "PASS"
     },
     {
@@ -245,12 +245,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 8,
-        "latency_seconds": 1.13,
+        "latency_seconds": 7.229,
         "status": "PASS"
     },
     {
         "question": "What types of properties are available on Wasalt?",
-        "answer": "Wasalt lists a range of **properties** across Saudi Arabia, including:\n\n* **Apartments** – both for rent and for sale.  \n* **Villas** – both for rent and for sale.  \n\nThe platform’s listings cover these property types nationwide, allowing users to search, compare and transact on verified apartments and villas for sale or rent.",
+        "answer": "Wasalt lists a variety of property types across Saudi Arabia, including **apartments**, **villas**, and **rest houses**. The platform offers these properties for both sale and rent, allowing users to browse, compare and invest in the type of property that fits their needs.",
         "expected_keywords": [
             "apartments",
             "villas"
@@ -263,13 +263,13 @@
         "keyword_score": 1.0,
         "route": "company",
         "route_correct": true,
-        "sources_count": 7,
-        "latency_seconds": 27.101,
+        "sources_count": 8,
+        "latency_seconds": 3.256,
         "status": "PASS"
     },
     {
         "question": "Can users find land for sale on Wasalt?",
-        "answer": "Yes. Wasalt lists lands for sale across Saudi Arabia. For example, the platform offers “a variety of lands for sale in Riyadh” (​Source 1) and “residential and commercial plots” in Dammam (​Source 3). Users can browse these listings to find land for purchase.",
+        "answer": "Yes. Wasalt lists land for sale, including residential and commercial plots. For example, the platform offers “a variety of lands for sale in Riyadh”【Source 2】 and “lands for sale in Dammam”【Source 3】.",
         "expected_keywords": [
             "land",
             "sale"
@@ -283,12 +283,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 11,
-        "latency_seconds": 1.107,
+        "latency_seconds": 5.0,
         "status": "PASS"
     },
     {
         "question": "In which Saudi cities can users find villas on Wasalt?",
-        "answer": "Users can find villas on Wasalt in the Saudi cities of **Riyadh** and **Jeddah**【Source 3†L1-L3】【Source 5†L1-L3】.",
+        "answer": "Users can find villas on Wasalt in the Saudi cities of **Riyadh** and **Jeddah**【Source 3】【Source 5】.",
         "expected_keywords": [
             "Riyadh",
             "Jeddah"
@@ -302,12 +302,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 5,
-        "latency_seconds": 0.703,
+        "latency_seconds": 1.198,
         "status": "PASS"
     },
     {
         "question": "Does Wasalt support property auctions?",
-        "answer": "Yes. Wasalt offers **Wasalt Auctions**, a feature where real‑estate assets are sold through timed online auctions. Bidders can compete to determine the final sale price, and the auctions include assets from private sellers as well as assets in collaboration with **Infath** (the Entrustment and Liquidation Center).【Source 1】【Source 2】",
+        "answer": "Yes. Wasalt offers **Wasalt Auctions**, a feature that sells real‑estate assets through timed, online auctions where bidders compete to determine the final sale price. The auctions include assets from private sellers and, as noted, assets in collaboration with Infath (the Entrustment and Liquidation Center).",
         "expected_keywords": [
             "auctions",
             "Infath"
@@ -321,12 +321,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 9,
-        "latency_seconds": 1.518,
+        "latency_seconds": 6.539,
         "status": "PASS"
     },
     {
         "question": "Does Wasalt have a mobile application?",
-        "answer": "Yes. The retrieved information states that Wasalt offers a mobile application called the **Wasalt Application**, which provides a user‑friendly platform for browsing, comparing and investing in properties across Saudi Arabia.",
+        "answer": "Yes. Wasalt offers a mobile app called the **Wasalt Application**, which provides a user‑friendly platform for browsing, comparing and investing in properties throughout Saudi Arabia【Source 3】.",
         "expected_keywords": [
             "Wasalt app"
         ],
@@ -338,12 +338,12 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 5,
-        "latency_seconds": 0.806,
+        "latency_seconds": 0.914,
         "status": "PASS"
     },
     {
         "question": "What is the purpose of the Wasalt Business app?",
-        "answer": "I could not verify this information from the available public pages.  \nPlease check the official Wasalt website or contact Wasalt for details about the purpose of the Wasalt Business app.",
+        "answer": "I could not verify this information from the available public pages.  \nPlease check the official Wasalt website or contact Wasalt directly for details about the Wasalt Business app.",
         "expected_keywords": [
             "Wasalt Business"
         ],
@@ -355,7 +355,7 @@
         "route": "company",
         "route_correct": true,
         "sources_count": 10,
-        "latency_seconds": 1.124,
+        "latency_seconds": 2.983,
         "status": "PASS"
     },
     {
@@ -372,7 +372,7 @@
         "route": "offtopic",
         "route_correct": true,
         "sources_count": 0,
-        "latency_seconds": 0.641,
+        "latency_seconds": 0.378,
         "status": "PASS"
     }
 ]

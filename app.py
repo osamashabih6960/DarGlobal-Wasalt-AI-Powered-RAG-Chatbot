@@ -13,8 +13,10 @@ from app.main import get_graph
 def respond(message, history, session_id):
     """Send the user message to the existing RAG graph."""
 
+    history = history or []
+
     if not message or not message.strip():
-        return "", history or []
+        return "", history
 
     if not session_id:
         session_id = str(uuid4())
@@ -26,7 +28,11 @@ def respond(message, history, session_id):
             session_id,
         )
 
-        answer = result.get("answer", "No answer was generated.")
+        answer = result.get(
+            "answer",
+            "No answer was generated.",
+        )
+
         sources = result.get("sources", [])
 
         if sources:
@@ -46,9 +52,15 @@ def respond(message, history, session_id):
             f"Error: {type(exc).__name__}"
         )
 
-    updated_history = (history or []) + [
-        {"role": "user", "content": message.strip()},
-        {"role": "assistant", "content": answer},
+    updated_history = history + [
+        {
+            "role": "user",
+            "content": message.strip(),
+        },
+        {
+            "role": "assistant",
+            "content": answer,
+        },
     ]
 
     return "", updated_history
@@ -61,7 +73,6 @@ def clear_chat():
 
 with gr.Blocks(
     title="DarGlobal x Wasalt AI Assistant",
-    theme=gr.themes.Soft(),
 ) as demo:
 
     gr.Markdown(
@@ -80,7 +91,6 @@ with gr.Blocks(
     chatbot = gr.Chatbot(
         height=500,
         label="AI Assistant",
-        type="messages",
         show_copy_button=True,
     )
 
@@ -126,5 +136,8 @@ with gr.Blocks(
 if __name__ == "__main__":
     demo.launch(
         server_name="0.0.0.0",
-        server_port=int(os.getenv("GRADIO_SERVER_PORT", "7860")),
+        server_port=int(
+            os.getenv("GRADIO_SERVER_PORT", "7860")
+        ),
+        theme=gr.themes.Soft(),
     )

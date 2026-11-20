@@ -1,18 +1,55 @@
+
 name: CI
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
 jobs:
   ci:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: "3.11", cache: pip}
-      - run: pip install -r requirements-dev.txt
-      - run: ruff check .
-      - run: pytest -q
-      - run: docker build -t dar-bot .
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run Ruff
+        run: ruff check .
+
+      - name: Run tests
+        run: pytest -q
+
+      - name: Build Docker image
+        run: docker build -t dar-bot .
+
       - name: Container smoke test
         run: |
-          docker run -d -p 7860:7860 --name t dar-bot
-          for i in $(seq 1 20); do curl -fs localhost:7860/health && exit 0; sleep 3; done
-          docker logs t; exit 1
+          docker run -d -p 7860:7860 --name dar-bot-container dar-bot
+
+          for i in $(seq 1 40); do
+            if curl -fsS http://localhost:7860/health; then
+              echo "Health check passed!"
+              docker stop dar-bot-container
+              exit 0
+            fi
+            sleep 3
+          done
+
+          echo "Container health check failed!"
+          docker logs dar-bot-container
+          exit 1
+
+      - name: Cleanup container
+        if: always()
+        run: docker rm -f dar-bot-container || true

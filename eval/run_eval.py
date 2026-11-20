@@ -1,4 +1,3 @@
-
 """Evaluate the DarGlobal x Wasalt RAG chatbot using MLflow."""
 
 import json
@@ -18,9 +17,9 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 load_dotenv(PROJECT_ROOT / ".env")
 
-import mlflow
-from app.graph import TOP_K, ask, build_graph
+import mlflow  # noqa: E402
 
+from app.graph import TOP_K, ask, build_graph  # noqa: E402
 
 # --------------------------------------------------
 # Configuration
@@ -38,6 +37,7 @@ MAX_RETRIES = 3
 # MLflow configuration
 # --------------------------------------------------
 
+
 def configure_mlflow():
     """Configure MLflow experiment tracking."""
 
@@ -53,34 +53,25 @@ def configure_mlflow():
 # Evaluation dataset
 # --------------------------------------------------
 
+
 def load_test_cases():
     """Load evaluation questions from JSON."""
 
     if not EVAL_FILE.exists():
-        raise FileNotFoundError(
-            f"Evaluation dataset not found: {EVAL_FILE}"
-        )
+        raise FileNotFoundError(f"Evaluation dataset not found: {EVAL_FILE}")
 
     with EVAL_FILE.open("r", encoding="utf-8") as file:
         cases = json.load(file)
 
     if not isinstance(cases, list) or not cases:
-        raise ValueError(
-            "Evaluation dataset must be a non-empty JSON list."
-        )
+        raise ValueError("Evaluation dataset must be a non-empty JSON list.")
 
     for index, case in enumerate(cases, start=1):
         if not isinstance(case, dict):
-            raise ValueError(
-                f"Invalid evaluation case at position {index}"
-            )
+            raise ValueError(f"Invalid evaluation case at position {index}")
 
-        if not case.get("question") or not isinstance(
-            case.get("keywords"), list
-        ):
-            raise ValueError(
-                f"Invalid question or keywords at position {index}"
-            )
+        if not case.get("question") or not isinstance(case.get("keywords"), list):
+            raise ValueError(f"Invalid question or keywords at position {index}")
 
     return cases
 
@@ -88,6 +79,7 @@ def load_test_cases():
 # --------------------------------------------------
 # Text normalization
 # --------------------------------------------------
+
 
 def normalize_text(text):
     """Normalize text for reliable keyword matching."""
@@ -111,27 +103,19 @@ def normalize_text(text):
 # Answer evaluation
 # --------------------------------------------------
 
+
 def evaluate_answer(answer, expected_keywords):
     """Check whether the answer contains expected keywords."""
 
     normalized_answer = normalize_text(answer)
 
     matched_keywords = [
-        keyword
-        for keyword in expected_keywords
-        if normalize_text(keyword) in normalized_answer
+        keyword for keyword in expected_keywords if normalize_text(keyword) in normalized_answer
     ]
 
-    missing_keywords = [
-        keyword
-        for keyword in expected_keywords
-        if keyword not in matched_keywords
-    ]
+    missing_keywords = [keyword for keyword in expected_keywords if keyword not in matched_keywords]
 
-    score = (
-        len(matched_keywords) / len(expected_keywords)
-        if expected_keywords else 0.0
-    )
+    score = len(matched_keywords) / len(expected_keywords) if expected_keywords else 0.0
 
     return score, matched_keywords, missing_keywords
 
@@ -140,16 +124,15 @@ def evaluate_answer(answer, expected_keywords):
 # Rate-limit detection and retry
 # --------------------------------------------------
 
+
 def ask_with_retry(graph, question, thread_id):
     """Call chatbot with retry protection for rate limits."""
 
     for attempt in range(1, MAX_RETRIES + 1):
-
         try:
             return ask(graph, question, thread_id)
 
         except Exception as error:
-
             error_message = str(error).lower()
 
             is_rate_limit = any(
@@ -170,9 +153,7 @@ def ask_with_retry(graph, question, thread_id):
             wait_time = 20 * attempt
 
             print(
-                f"Rate limit detected. "
-                f"Retry {attempt}/{MAX_RETRIES} "
-                f"after {wait_time} seconds..."
+                f"Rate limit detected. Retry {attempt}/{MAX_RETRIES} after {wait_time} seconds..."
             )
 
             time.sleep(wait_time)
@@ -183,6 +164,7 @@ def ask_with_retry(graph, question, thread_id):
 # --------------------------------------------------
 # Run evaluation
 # --------------------------------------------------
+
 
 def run_evaluation():
     """Run chatbot evaluation and log metrics to MLflow."""
@@ -199,26 +181,24 @@ def run_evaluation():
     model_name = os.getenv("MODEL", "unknown")
 
     with mlflow.start_run(run_name="rag-evaluation"):
-
-        mlflow.log_params({
-            "model": model_name,
-            "embedding_model": "BAAI/bge-small-en-v1.5",
-            "chunk_size": 800,
-            "chunk_overlap": 100,
-            "top_k": TOP_K,
-            "total_test_cases": len(test_cases),
-            "request_delay_seconds": REQUEST_DELAY_SECONDS,
-            "max_retries": MAX_RETRIES,
-        })
+        mlflow.log_params(
+            {
+                "model": model_name,
+                "embedding_model": "BAAI/bge-small-en-v1.5",
+                "chunk_size": 800,
+                "chunk_overlap": 100,
+                "top_k": TOP_K,
+                "total_test_cases": len(test_cases),
+                "request_delay_seconds": REQUEST_DELAY_SECONDS,
+                "max_retries": MAX_RETRIES,
+            }
+        )
 
         for index, case in enumerate(test_cases, start=1):
-
             question = case["question"]
             expected_keywords = case["keywords"]
 
-            print(
-                f"\n[{index}/{len(test_cases)}] {question}"
-            )
+            print(f"\n[{index}/{len(test_cases)}] {question}")
 
             start_time = time.perf_counter()
 
@@ -238,10 +218,7 @@ def run_evaluation():
                     expected_keywords,
                 )
 
-                route_correct = (
-                    "expect_route" not in case
-                    or route == case["expect_route"]
-                )
+                route_correct = "expect_route" not in case or route == case["expect_route"]
 
                 is_correct = score == 1.0 and route_correct
 
@@ -278,7 +255,6 @@ def run_evaluation():
                 print(f"Latency: {latency:.2f}s")
 
             except Exception as error:
-
                 latency = time.perf_counter() - start_time
                 failed += 1
 
@@ -292,16 +268,11 @@ def run_evaluation():
 
                 results.append(result)
 
-                print(
-                    f"ERROR: {type(error).__name__}: {error}"
-                )
+                print(f"ERROR: {type(error).__name__}: {error}")
 
             finally:
                 if index < len(test_cases):
-                    print(
-                        f"Waiting {REQUEST_DELAY_SECONDS} seconds "
-                        "before next question..."
-                    )
+                    print(f"Waiting {REQUEST_DELAY_SECONDS} seconds before next question...")
                     time.sleep(REQUEST_DELAY_SECONDS)
 
         # ------------------------------------------
@@ -311,31 +282,22 @@ def run_evaluation():
         accuracy = passed / len(test_cases)
 
         average_score = (
-            mean([
-                item.get("keyword_score", 0.0)
-                for item in results
-            ])
-            if results else 0.0
+            mean([item.get("keyword_score", 0.0) for item in results]) if results else 0.0
         )
 
-        valid_latencies = [
-            item["latency_seconds"]
-            for item in results
-            if "latency_seconds" in item
-        ]
+        valid_latencies = [item["latency_seconds"] for item in results if "latency_seconds" in item]
 
-        average_latency = (
-            mean(valid_latencies)
-            if valid_latencies else 0.0
+        average_latency = mean(valid_latencies) if valid_latencies else 0.0
+
+        mlflow.log_metrics(
+            {
+                "accuracy": accuracy,
+                "pass_count": passed,
+                "fail_count": failed,
+                "average_keyword_score": average_score,
+                "average_latency_seconds": average_latency,
+            }
         )
-
-        mlflow.log_metrics({
-            "accuracy": accuracy,
-            "pass_count": passed,
-            "fail_count": failed,
-            "average_keyword_score": average_score,
-            "average_latency_seconds": average_latency,
-        })
 
         # ------------------------------------------
         # Save evaluation results

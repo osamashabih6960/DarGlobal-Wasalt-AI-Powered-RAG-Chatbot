@@ -1,4 +1,3 @@
-
 """LangGraph RAG agent for DarGlobal and Wasalt.
 
 Workflow:
@@ -25,7 +24,6 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 
-
 # --------------------------------------------------
 # Configuration
 # --------------------------------------------------
@@ -34,9 +32,7 @@ EMB_MODEL = "BAAI/bge-small-en-v1.5"
 
 TOP_K = int(os.getenv("TOP_K", "5"))
 
-MAX_RETRIEVED_DOCS = int(
-    os.getenv("MAX_RETRIEVED_DOCS", "12")
-)
+MAX_RETRIEVED_DOCS = int(os.getenv("MAX_RETRIEVED_DOCS", "12"))
 
 
 # --------------------------------------------------
@@ -174,6 +170,7 @@ Retrieved context:
 # LangGraph State
 # --------------------------------------------------
 
+
 class State(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
     route: str
@@ -260,10 +257,7 @@ def detect_simple_route(message: str) -> str | None:
     if normalized in CHITCHAT_MESSAGES:
         return "chitchat"
 
-    if any(
-        keyword.lower() in normalized
-        for keyword in COMPANY_KEYWORDS
-    ):
+    if any(keyword.lower() in normalized for keyword in COMPANY_KEYWORDS):
         return "company"
 
     return None
@@ -289,6 +283,7 @@ def parse_route(response_text: str) -> str:
 # Retrieval Query Expansion
 # --------------------------------------------------
 
+
 def build_retrieval_queries(question: str) -> list[str]:
     """Build targeted search queries for relevant retrieval."""
 
@@ -298,7 +293,6 @@ def build_retrieval_queries(question: str) -> list[str]:
 
     # Wasalt general identity and company information.
     if "wasalt" in normalized:
-
         if any(
             word in normalized
             for word in [
@@ -310,11 +304,13 @@ def build_retrieval_queries(question: str) -> list[str]:
                 "proptech",
             ]
         ):
-            queries.extend([
-                "Wasalt Saudi Arabia PropTech real estate platform",
-                "Wasalt Real Estate Services Saudi Arabia company",
-                "Wasalt AI backed digital real estate marketplace",
-            ])
+            queries.extend(
+                [
+                    "Wasalt Saudi Arabia PropTech real estate platform",
+                    "Wasalt Real Estate Services Saudi Arabia company",
+                    "Wasalt AI backed digital real estate marketplace",
+                ]
+            )
 
         # Wasalt property marketplace and user actions.
         if any(
@@ -335,39 +331,29 @@ def build_retrieval_queries(question: str) -> list[str]:
             )
 
     # Land listings and land sales.
-    if any(
-        word in normalized
-        for word in ["land", "plot", "plots"]
-    ):
-        queries.extend([
-            "Wasalt land plots land listings properties "
-            "for sale Saudi Arabia",
-            "Wasalt property categories land for sale "
-            "real estate listings",
-        ])
+    if any(word in normalized for word in ["land", "plot", "plots"]):
+        queries.extend(
+            [
+                "Wasalt land plots land listings properties for sale Saudi Arabia",
+                "Wasalt property categories land for sale real estate listings",
+            ]
+        )
 
     # Property auctions and Infath.
-    if any(
-        word in normalized
-        for word in ["auction", "auctions", "infath"]
-    ):
-        queries.extend([
-            "Wasalt Auctions Infath Saudi Arabia real estate auction",
-            "Infath Entrustment and Liquidation Center Wasalt",
-            "Wasalt auctions collaboration with Infath properties",
-            "Properties For Sale and Rent in Saudi Arabia Wasalt "
-            "Frequently Asked Questions auctions Infath",
-        ])
+    if any(word in normalized for word in ["auction", "auctions", "infath"]):
+        queries.extend(
+            [
+                "Wasalt Auctions Infath Saudi Arabia real estate auction",
+                "Infath Entrustment and Liquidation Center Wasalt",
+                "Wasalt auctions collaboration with Infath properties",
+                "Properties For Sale and Rent in Saudi Arabia Wasalt "
+                "Frequently Asked Questions auctions Infath",
+            ]
+        )
 
     # DarGlobal general information.
-    if any(
-        word in normalized
-        for word in ["darglobal", "dar global"]
-    ):
-        queries.append(
-            "DarGlobal luxury real estate developer "
-            "residential mixed use developments"
-        )
+    if any(word in normalized for word in ["darglobal", "dar global"]):
+        queries.append("DarGlobal luxury real estate developer residential mixed use developments")
 
     # Remove empty and duplicate queries.
     unique_queries = []
@@ -388,16 +374,14 @@ def build_retrieval_queries(question: str) -> list[str]:
 # Groq LLM
 # --------------------------------------------------
 
+
 def build_llm() -> ChatGroq:
     """Create the Groq chat model with optional fallback models."""
 
     api_key = os.getenv("GROQ_API_KEY")
 
     if not api_key:
-        raise ValueError(
-            "GROQ_API_KEY is missing. "
-            "Please configure it in your .env file."
-        )
+        raise ValueError("GROQ_API_KEY is missing. Please configure it in your .env file.")
 
     kwargs = {
         "api_key": api_key,
@@ -414,11 +398,7 @@ def build_llm() -> ChatGroq:
     models = [primary_model]
 
     models.extend(
-        model.strip()
-        for model in os.getenv(
-            "FALLBACK_MODELS", ""
-        ).split(",")
-        if model.strip()
+        model.strip() for model in os.getenv("FALLBACK_MODELS", "").split(",") if model.strip()
     )
 
     primary = ChatGroq(
@@ -426,21 +406,15 @@ def build_llm() -> ChatGroq:
         **kwargs,
     )
 
-    fallbacks = [
-        ChatGroq(model=model, **kwargs)
-        for model in models[1:]
-    ]
+    fallbacks = [ChatGroq(model=model, **kwargs) for model in models[1:]]
 
-    return (
-        primary.with_fallbacks(fallbacks)
-        if fallbacks
-        else primary
-    )
+    return primary.with_fallbacks(fallbacks) if fallbacks else primary
 
 
 # --------------------------------------------------
 # Build RAG Graph
 # --------------------------------------------------
+
 
 def build_graph():
     """Build and compile the LangGraph RAG workflow."""
@@ -532,9 +506,7 @@ def build_graph():
         messages = state["messages"]
 
         if len(messages) <= 1:
-            return {
-                "query": str(messages[-1].content)
-            }
+            return {"query": str(messages[-1].content)}
 
         response = llm.invoke(
             [
@@ -545,9 +517,7 @@ def build_graph():
 
         query = str(response.content).strip()
 
-        return {
-            "query": query or str(messages[-1].content)
-        }
+        return {"query": query or str(messages[-1].content)}
 
     # ----------------------------------------------
     # Retrieve relevant documents from FAISS
@@ -558,27 +528,18 @@ def build_graph():
         search_query = state.get("query", "").strip()
 
         if not search_query:
-            search_query = str(
-                state["messages"][-1].content
-            )
+            search_query = str(state["messages"][-1].content)
 
-        search_queries = build_retrieval_queries(
-            search_query
-        )
+        search_queries = build_retrieval_queries(search_query)
 
         normalized_question = search_query.lower()
 
         is_auction_query = any(
-            word in normalized_question
-            for word in ["auction", "auctions", "infath"]
+            word in normalized_question for word in ["auction", "auctions", "infath"]
         )
 
-        is_wasalt_identity_query = (
-            "wasalt" in normalized_question
-            and any(
-                word in normalized_question
-                for word in ["what is", "who is", "about", "company"]
-            )
+        is_wasalt_identity_query = "wasalt" in normalized_question and any(
+            word in normalized_question for word in ["what is", "who is", "about", "company"]
         )
 
         # Store documents and their relevance scores.
@@ -586,14 +547,12 @@ def build_graph():
 
         # Search every expanded query before selecting documents.
         for query_index, query in enumerate(search_queries):
-
             found = store.similarity_search(
                 query,
                 k=TOP_K,
             )
 
             for rank, doc in enumerate(found):
-
                 url = doc.metadata.get("url", "")
                 content = doc.page_content.strip()
 
@@ -606,16 +565,14 @@ def build_graph():
                 )
 
                 # Base score preserves FAISS ranking.
-                relevance_score = (
-                    1.0 / (rank + 1)
-                ) + (
-                    0.05 / (query_index + 1)
-                )
+                relevance_score = (1.0 / (rank + 1)) + (0.05 / (query_index + 1))
 
                 searchable_content = (
-                    content + " " +
-                    str(doc.metadata.get("title") or "") + " " +
-                    str(doc.metadata.get("category") or "")
+                    content
+                    + " "
+                    + str(doc.metadata.get("title") or "")
+                    + " "
+                    + str(doc.metadata.get("category") or "")
                 ).lower()
 
                 # Give strong priority to explicit Infath auction evidence.
@@ -626,10 +583,7 @@ def build_graph():
                     if "auction" in searchable_content:
                         relevance_score += 3
 
-                    if (
-                        "infath" in searchable_content
-                        and "auction" in searchable_content
-                    ):
+                    if "infath" in searchable_content and "auction" in searchable_content:
                         relevance_score += 10
 
                 # Give priority to Saudi Arabia evidence for Wasalt identity.
@@ -654,10 +608,7 @@ def build_graph():
 
                 existing = document_scores.get(chunk_key)
 
-                if (
-                    existing is None
-                    or relevance_score > existing["score"]
-                ):
+                if existing is None or relevance_score > existing["score"]:
                     document_scores[chunk_key] = {
                         "score": relevance_score,
                         "document": document_data,
@@ -670,10 +621,7 @@ def build_graph():
             reverse=True,
         )
 
-        documents = [
-            item["document"]
-            for item in ranked_documents[:MAX_RETRIEVED_DOCS]
-        ]
+        documents = [item["document"] for item in ranked_documents[:MAX_RETRIEVED_DOCS]]
 
         print("\n--- RETRIEVAL DEBUG ---")
         print(f"Search queries: {search_queries}")
@@ -681,29 +629,22 @@ def build_graph():
 
         if is_auction_query:
             infath_found = any(
-                "infath" in (
-                    str(doc.get("text", "")) + " " +
-                    str(doc.get("title", ""))
-                ).lower()
+                "infath" in (str(doc.get("text", "")) + " " + str(doc.get("title", ""))).lower()
                 for doc in documents
             )
             print(f"Infath document retrieved: {infath_found}")
 
         if is_wasalt_identity_query:
             saudi_found = any(
-                "saudi arabia" in (
-                    str(doc.get("text", "")) + " " +
-                    str(doc.get("title", ""))
-                ).lower()
+                "saudi arabia"
+                in (str(doc.get("text", "")) + " " + str(doc.get("title", ""))).lower()
                 for doc in documents
             )
             print(f"Saudi Arabia context retrieved: {saudi_found}")
 
         print("-----------------------\n")
 
-        return {
-            "docs": documents
-        }
+        return {"docs": documents}
 
     # ----------------------------------------------
     # Generate grounded answer
@@ -719,7 +660,6 @@ def build_graph():
             documents,
             start=1,
         ):
-
             context_parts.append(
                 f"[Source {index}]\n"
                 f"Title: {doc.get('title') or 'Unknown'}\n"
@@ -733,11 +673,7 @@ def build_graph():
         if not context.strip():
             context = "No relevant documents were retrieved."
 
-        system_message = SystemMessage(
-            content=ANSWER_PROMPT.format(
-                context=context
-            )
-        )
+        system_message = SystemMessage(content=ANSWER_PROMPT.format(context=context))
 
         response = llm.invoke(
             [
@@ -746,9 +682,7 @@ def build_graph():
             ]
         )
 
-        return {
-            "messages": [response]
-        }
+        return {"messages": [response]}
 
     # --------------------------------------------------
     # Define graph
@@ -787,30 +721,21 @@ def build_graph():
     graph.add_edge("offtopic", END)
     graph.add_edge("generate", END)
 
-    return graph.compile(
-        checkpointer=MemorySaver()
-    )
+    return graph.compile(checkpointer=MemorySaver())
 
 
 # --------------------------------------------------
 # Chat Function
 # --------------------------------------------------
 
+
 def ask(graph, question: str, session_id: str) -> dict:
     """Ask a question and return answer, sources and route."""
 
-    config = {
-        "configurable": {
-            "thread_id": session_id
-        }
-    }
+    config = {"configurable": {"thread_id": session_id}}
 
     output = graph.invoke(
-        {
-            "messages": [
-                HumanMessage(content=question)
-            ]
-        },
+        {"messages": [HumanMessage(content=question)]},
         config,
     )
 
@@ -818,13 +743,10 @@ def ask(graph, question: str, session_id: str) -> dict:
     sources = []
 
     if output.get("route") == "company":
-
         for document in output.get("docs", []):
-
             url = document.get("url")
 
             if url and url not in seen:
-
                 seen.add(url)
 
                 sources.append(

@@ -1,4 +1,3 @@
-
 """FastAPI application for the DarGlobal x Wasalt RAG chatbot."""
 
 import os
@@ -11,7 +10,6 @@ from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
-
 
 # Load environment variables from project root .env
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -30,6 +28,7 @@ app = FastAPI(
 # Request Schema
 # --------------------------------------------------
 
+
 class ChatIn(BaseModel):
     message: str = Field(min_length=1, max_length=1000)
     session_id: str = Field(default="default", max_length=64)
@@ -38,6 +37,7 @@ class ChatIn(BaseModel):
 # --------------------------------------------------
 # LangGraph Initialization
 # --------------------------------------------------
+
 
 @lru_cache(maxsize=1)
 def get_graph():
@@ -51,6 +51,7 @@ def get_graph():
 # --------------------------------------------------
 # Health Check
 # --------------------------------------------------
+
 
 @app.get("/health")
 def health():
@@ -66,6 +67,7 @@ def health():
 # --------------------------------------------------
 # Chat Endpoint
 # --------------------------------------------------
+
 
 @app.post("/chat")
 def chat(body: ChatIn, bg: BackgroundTasks):
@@ -104,6 +106,7 @@ def chat(body: ChatIn, bg: BackgroundTasks):
 # --------------------------------------------------
 # Frontend
 # --------------------------------------------------
+
 
 @app.get("/")
 def index():

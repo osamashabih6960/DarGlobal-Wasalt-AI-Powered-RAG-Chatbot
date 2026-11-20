@@ -1,4 +1,5 @@
 """Optional MLflow logging. Never breaks the chat if MLflow is unavailable."""
+
 import os
 
 EXPERIMENT = "dar-wasalt-chatbot"

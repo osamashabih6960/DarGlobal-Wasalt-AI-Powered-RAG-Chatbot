@@ -1,18 +1,16 @@
-
 """Load DarGlobal and Wasalt data, create chunks, generate embeddings,
 and store vectors in FAISS.
 """
 
 import json
 import shutil
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-
 
 # Configuration
 DATA_PATH = Path("data/combined_dataset.jsonl")
@@ -41,7 +39,6 @@ def load_docs() -> list[Document]:
 
     with DATA_PATH.open("r", encoding="utf-8-sig") as file:
         for line_number, line in enumerate(file, start=1):
-
             if not line.strip():
                 continue
 
@@ -71,9 +68,7 @@ def load_docs() -> list[Document]:
                 )
 
             except (json.JSONDecodeError, TypeError) as exc:
-                raise ValueError(
-                    f"Invalid JSON at line {line_number}: {exc}"
-                ) from exc
+                raise ValueError(f"Invalid JSON at line {line_number}: {exc}") from exc
 
     print(f"Documents loaded: {len(docs)}")
     print(f"Invalid/empty records skipped: {invalid_records}")

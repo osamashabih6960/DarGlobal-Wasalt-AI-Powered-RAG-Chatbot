@@ -60,3 +60,4 @@ orjson>=3.10
 pytest>=8.0
 ruff>=0.6
 gradio>=5.0
+langchain-groq>=0.3.0

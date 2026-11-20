@@ -375,42 +375,47 @@ def build_retrieval_queries(question: str) -> list[str]:
 # --------------------------------------------------
 
 
-def build_llm() -> ChatGroq:
-    """Create the Groq chat model with optional fallback models."""
 
-    api_key = os.getenv("GROQ_API_KEY")
+def build_llm() -> ChatGroq:
+    """Create Groq chat model with a supported fallback."""
+
+    api_key = os.getenv("GROQ_API_KEY", "").strip()
 
     if not api_key:
-        raise ValueError("GROQ_API_KEY is missing. Please configure it in your .env file.")
+        raise ValueError(
+            "GROQ_API_KEY is missing. Configure it in Render Environment."
+        )
 
     kwargs = {
         "api_key": api_key,
         "temperature": 0.2,
-        "max_retries": 1,
+        "max_retries": 2,
         "timeout": 60,
     }
 
     primary_model = os.getenv(
-        "MODEL",
+        "GROQ_MODEL",
         "openai/gpt-oss-120b",
-    )
+    ).strip()
 
-    models = [primary_model]
-
-    models.extend(
-        model.strip() for model in os.getenv("FALLBACK_MODELS", "").split(",") if model.strip()
-    )
+    fallback_model = os.getenv(
+        "GROQ_FALLBACK_MODEL",
+        "openai/gpt-oss-20b",
+    ).strip()
 
     primary = ChatGroq(
-        model=models[0],
+        model=primary_model,
         **kwargs,
     )
 
-    fallbacks = [ChatGroq(model=model, **kwargs) for model in models[1:]]
+    if fallback_model and fallback_model != primary_model:
+        fallback = ChatGroq(
+            model=fallback_model,
+            **kwargs,
+        )
+        return primary.with_fallbacks([fallback])
 
-    return primary.with_fallbacks(fallbacks) if fallbacks else primary
-
-
+    return primary
 # --------------------------------------------------
 # Build RAG Graph
 # --------------------------------------------------

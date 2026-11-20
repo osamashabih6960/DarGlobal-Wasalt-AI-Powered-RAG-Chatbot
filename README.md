@@ -1,34 +1,42 @@
 
 ---
 title: DarGlobal x Wasalt AI Assistant
-sdk: docker
-app_port: 7860
+emoji: 🏡
+colorFrom: blue
+colorTo: green
+sdk: gradio
+sdk_version: "6.32.0"
+app_file: app.py
+pinned: false
 ---
 
 # DarGlobal × Wasalt — AI-Powered RAG Chatbot
 
 An AI-powered real estate assistant that answers questions about DarGlobal and Wasalt using Retrieval-Augmented Generation (RAG).
 
-Built with LangGraph, FastAPI, FAISS, OpenRouter, LangSmith and MLflow.
+Built with Python, LangGraph, FastAPI, Gradio, FAISS, Groq, LangSmith and MLflow.
 
 ## Project Overview
 
-This project provides a conversational interface for users to explore information about DarGlobal and Wasalt.
+This project provides an intelligent conversational assistant that helps users explore information about DarGlobal and Wasalt.
 
 The assistant retrieves relevant information from indexed website content and generates context-grounded answers with source references.
 
-### Key Features
+## Key Features
 
 - **RAG Pipeline:** Retrieves relevant information from indexed documents.
 - **LangGraph:** Handles query routing and multi-step retrieval workflows.
-- **FastAPI:** Provides the backend API and chatbot interface.
+- **Gradio Interface:** Provides an interactive chatbot experience.
+- **FastAPI:** Provides the backend API.
 - **FAISS:** Performs vector-based similarity search.
-- **OpenRouter:** Provides LLM inference with fallback models.
+- **Groq:** Provides LLM inference.
+- **FastEmbed:** Generates document embeddings.
 - **LangSmith:** Supports tracing and debugging.
 - **MLflow:** Tracks evaluation experiments and metrics.
-- **Docker:** Containerized application deployment.
-- **GitHub Actions:** Automated CI and deployment workflows.
-- **Evaluation:** 20 curated QA test cases with a 100% pass rate.
+- **Docker:** Supports containerized application deployment.
+- **GitHub Actions:** Automates CI and deployment workflows.
+- **Source References:** Includes relevant source URLs in chatbot responses.
+- **Evaluation:** Includes curated QA test cases and evaluation metrics.
 
 ## Architecture
 
@@ -39,16 +47,19 @@ flowchart TD
     C --> D[Text Chunking]
     D --> E[Embeddings]
     E --> F[FAISS Vector Index]
-    F --> G[LangGraph RAG Agent]
-    H[User Query] --> G
-    G --> I[Query Routing]
-    I --> J[Retriever]
-    J --> F
-    J --> K[LLM via OpenRouter]
-    K --> L[Grounded Answer and Sources]
-    L --> M[FastAPI Chat Interface]
-    G -.-> N[LangSmith Tracing]
-    M -.-> O[MLflow Evaluation]
+
+    H[User Query] --> G[Gradio Chat Interface]
+    G --> I[LangGraph RAG Agent]
+    I --> J[Query Routing]
+    J --> K[Retriever]
+    K --> F
+    K --> L[LLM via Groq]
+    L --> M[Grounded Answer and Sources]
+    M --> G
+
+    I -.-> N[LangSmith Tracing]
+    I -.-> O[MLflow Evaluation]
+    P[FastAPI Backend] --> I
 ```
 
 ## Technology Stack
@@ -56,19 +67,22 @@ flowchart TD
 | Category | Technologies |
 |---|---|
 | Language | Python |
-| LLM | OpenRouter |
+| LLM Provider | Groq |
 | Agent Framework | LangGraph |
 | Retrieval | FAISS |
 | Embeddings | FastEmbed |
 | Backend | FastAPI |
+| Frontend | Gradio |
 | Observability | LangSmith |
 | Experiment Tracking | MLflow |
 | Containerization | Docker |
 | CI/CD | GitHub Actions |
+| Testing | Pytest |
+| Code Quality | Ruff |
 
 ## Evaluation Results
 
-Latest evaluation run:
+Latest recorded evaluation results:
 
 | Metric | Result |
 |---|---:|
@@ -91,7 +105,6 @@ Evaluation results are available in `eval/eval_results.json`.
 │   ├── tracking.py
 │   └── static/
 ├── data/
-│   └── dataset manifests
 ├── docs/
 ├── eval/
 │   ├── qa.json
@@ -100,12 +113,16 @@ Evaluation results are available in `eval/eval_results.json`.
 ├── tests/
 ├── .github/
 │   └── workflows/
+│       ├── ci.yml
+│       └── deploy.yml
+├── app.py
 ├── Dockerfile
 ├── docker-compose.yml
 ├── ingest.py
 ├── scrape.py
 ├── requirements.txt
-└── requirements-dev.txt
+├── requirements-dev.txt
+└── README.md
 ```
 
 ## Getting Started
@@ -132,8 +149,8 @@ Activate on Windows PowerShell:
 
 ### 3. Install Dependencies
 
-```bash
-pip install -r requirements-dev.txt
+```powershell
+python -m pip install -r requirements-dev.txt
 ```
 
 ### 4. Configure Environment Variables
@@ -142,50 +159,90 @@ pip install -r requirements-dev.txt
 Copy-Item .env.example .env
 ```
 
-Add your own API credentials to `.env`.
+Add your required API credentials to `.env`.
 
 Never commit API keys or secrets.
 
 ### 5. Build the Dataset and Vector Index
 
-```bash
+```powershell
 python .\scrape.py
 python .\ingest.py
 ```
 
-### 6. Run the Application
+### 6. Run the Gradio Chatbot
 
-```bash
-uvicorn app.main:app --host 0.0.0.0 --port 7860
+```powershell
+python .\app.py
 ```
 
 Open:
 
-http://localhost:7860
+http://127.0.0.1:7860
 
-### 7. Run Evaluation
+### 7. Run the FastAPI Backend
 
-```bash
+```powershell
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+API documentation:
+
+http://127.0.0.1:8000/docs
+
+Health endpoint:
+
+http://127.0.0.1:8000/health
+
+### 8. Run Evaluation
+
+```powershell
 python .\eval\run_eval.py
 ```
 
-### 8. Run with Docker
+### 9. Run with Docker
 
 ```bash
 docker compose up --build
 ```
+
+## Hugging Face Deployment
+
+The chatbot is configured for deployment using Hugging Face Spaces with the Gradio SDK.
+
+Live Space:
+
+https://huggingface.co/spaces/osamashabih/wasalt-chatbot
+
+Deployment workflow:
+
+1. Push changes to the GitHub main branch.
+2. GitHub Actions executes the CI workflow.
+3. After successful CI, the deployment workflow pushes the project to Hugging Face Spaces.
+4. Hugging Face builds and launches the Gradio application.
+
+### Required Hugging Face Secret
+
+Configure the following secret in Hugging Face Space Settings → Variables and secrets:
+
+- `GROQ_API_KEY`
+
+Never expose API keys in source code or GitHub commits.
 
 ## Monitoring and Evaluation
 
 - LangSmith is used for tracing and debugging LLM workflows.
 - MLflow is used for evaluation experiment tracking.
 - Evaluation results are stored in `eval/eval_results.json`.
+- Pytest is used for automated testing.
 
 ## Data and Responsible Usage
 
 The project uses publicly accessible DarGlobal and Wasalt website content.
 
-Crawling and indexing are performed for retrieval and experimentation. Generated datasets and vector indexes are excluded from the Git repository.
+Crawling and indexing are performed for retrieval and experimentation. Crawling respects applicable website access restrictions and does not bypass authentication or access controls.
+
+Generated datasets and vector indexes are excluded from the Git repository where appropriate.
 
 ## Future Improvements
 
@@ -194,11 +251,16 @@ Crawling and indexing are performed for retrieval and experimentation. Generated
 - True token streaming.
 - Scheduled data refresh.
 - Expanded evaluation coverage.
+- Multilingual chatbot support.
+- Improved source-grounding and answer verification.
+- Production monitoring and performance optimization.
 
 ## Author
 
 **Osama Shabih**
 
-GitHub: [@osamashabih6960](https://github.com/osamashabih6960)
+GitHub: https://github.com/osamashabih6960
 
-Project Repository: [DarGlobal-Wasalt-AI-Powered-RAG-Chatbot](https://github.com/osamashabih6960/DarGlobal-Wasalt-AI-Powered-RAG-Chatbot)
+Project Repository:
+
+https://github.com/osamashabih6960/DarGlobal-Wasalt-AI-Powered-RAG-Chatbot
